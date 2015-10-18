@@ -1,0 +1,23 @@
+{
+  "name": "sbcache",
+  "version": "1.0.0",
+  "description": "The cache class used in Scrollback",
+  "main": "cache.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/scrollback/sbcache.git"
+  },
+  "author": "scrollback",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/scrollback/sbcache/issues"
+  },
+  "homepage": "https://github.com/scrollback/sbcache#readme",
+  "dependencies": {
+    "jsonop": "^1.0.0",
+    "juri": "^1.0.2"
+  }
+}
