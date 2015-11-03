@@ -4,7 +4,7 @@
   "description": "The cache class used in Scrollback",
   "main": "cache.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --compilers js:babel/register"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,9 @@
   "dependencies": {
     "jsonop": "^1.0.0",
     "juri": "^1.0.2"
+  },
+  "devDependencies": {
+    "babel": "^6.0.15",
+    "babel-core": "^6.0.16"
   }
 }

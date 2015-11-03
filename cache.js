@@ -1,21 +1,22 @@
-let juri = require("juri")(),
-	jsonop = rerquire("jsonop"),
+"use strict";
+let jsonop = require("jsonop"),
+	State = require("state"),
 	{queryToKeyrange, keyrangeToQuery} = require("./querykeyrange");
 
 module.exports = class Cache {
-	constructor() {
-		this.state = {};
+	constructor(initialState) {
+		this.state = new State(initialState);
 		this.listeners = [];
 		this.pending = {};
 		this.recent = {};
 	}
-	
+
 	query(key, range, callback) {
 		let known = this.state.knowledge[key],
-			index = this.state.indexes[key];
-		
-		if (!callback && this.pending[key + ":" + range]) {
-			callback = this.pending[key + ":" + range];
+            index = this.state.indexes[key];
+
+        if (!callback && this.pending[key + ":" + range]) {
+            callback = this.pending[key + ":" + range];
 			delete this.pending[key + ":" + range];
 		}
 		
@@ -36,8 +37,13 @@ module.exports = class Cache {
 	setState(c) {
 		jsonop(this.state, c);
 		if (c.knowledge) {
-			/* update indexes */
+			/* delete these ranges of pointers from the appropriate indexes */
 		}
+        
+        if (c.entities) {
+            /* add these entities to the indexes */
+        }
+        
 		if (c.queries) {
 			/* iterate over queries; if any of them is a deletion
 				then call query() with it to ensure the callback is
