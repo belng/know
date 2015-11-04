@@ -3,8 +3,6 @@ let {
 	queryToKeyrange, keyrangeToQuery
 } = require("./querykeyrange");
 
-
-
 module.exports = class Index extends Array {
 	constructor(...args) {
 		super(...args);
@@ -46,53 +44,27 @@ module.exports = class Index extends Array {
 	}
 
 	findInsertPosition(item) {
-		let mid, low = 0, high = this.length - 1, prop = this.query.order, value = item[this.query.order];
-		
-		if(this.length === 0) return {position: 0, replace: false};
-		while (true) {
-			mid = Math.floor((low + high) / 2);
-			if(low === mid) break;
+		let mid, low = 0, high = this.length ? this.length - 1 : 0, prop = this.query.order, value = item[this.query.order];
+
+		if (this.length === 0) return {position: 0, replace: false};
+		while ((mid = Math.floor((low + high) / 2)) !== low) {
 			if (this[mid][prop] === value) return {position: mid, replace: true};
 			else if (this[mid][prop] < value) low = mid;
 			else high = mid;
 		}
-		
-		if(this[mid][prop] >= value) return { position : mid, replace: this[mid][prop] === value};
-		if(this[high][prop] <= value) return { position : high + (this[high][prop] === value ? 0 : 1), replace: this[high][prop] === value};
-		return { position: high, replace: false}
-	}
-	
-	findItemIndex(item) {
-		let mid, low = 0, high = this.length - 1, prop = this.query.order, value = item[this.query.order];
-		
-		if(this.length === 0) return -1;
-		while (true) {
-			mid = Math.floor((low + high) / 2);
-			if(low === mid) break;
-			if (this[mid][prop] === value) return {position: mid, replace: true};
-			else if (this[mid][prop] < value) low = mid;
-			else high = mid;
-		}
-		
-		if(this[mid][prop] >= value) return { position : mid, replace: this[mid][prop] === value};
-		if(this[high][prop] <= value) return { position : high + (this[high][prop] === value ? 0 : 1), replace: this[high][prop] === value};
-		return { position: high, replace: false}
+
+		if (this[mid][prop] >= value) return { position: mid, replace: this[mid][prop] === value};
+		if (this[high][prop] <= value) return { position: high + (this[high][prop] === value ? 0 : 1), replace: this[high][prop] === value};
+		return { position: high, replace: false};
 	}
 
 	get(i) {
 		return this[i];
 	}
-	
-	getItems(start, offset) {
-		let query = {}, itemIndex;
-		query[this.query.order] = start
-		itemIndex = findItemIndex(query);
-		if()
-	}
-	
+
 	add(item) {
-		var res = this.findInsertPosition(item)
-		this.splice(res.position, res.replace? 1 : 0, item);
+		var res = this.findInsertPosition(item);
+		this.splice(res.position, res.replace ? 1 : 0, item);
 		return this.length;
 	}
 };

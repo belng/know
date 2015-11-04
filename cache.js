@@ -25,7 +25,10 @@ module.exports = class Cache {
 		}
 		return -1;
 	}
-
+	
+	makeQuery() {
+	}
+	
 	query(key, range, callback) {
 		let known = this.state.knowledge[key],
 			index = this.state.indexes[key];
@@ -50,16 +53,24 @@ module.exports = class Cache {
 
 		for(j = from;i<to && j<index.length;j++) {
 			if(known[rangeIndex].end>index[itemIndex][]) {
+				let newQ = {};
+				newQ.type = q.type;
+				newQ.order = q.order;
+				newQ.filters = q.filters;
+				newQ.range = {
+					start: known[rangeIndex].end,
+					after: 20
+				};
 				rangeIndex++;
-				items.push("missing");
-
+				if(isPending(newQ)) {
+					if (this.getConnectionStatus()==="online") items.push("loading");
+					else items.push("missing");
+				} else {
+					makeQuery(newQ);
+				}
 			}
 			items.push(index[j]);
 		}
-		
-		
-		
-		// We now have the items,queries and knowledge ranges. insert missing and loading in the right position in the result;
 		
 		/*
 			TODO:
