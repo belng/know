@@ -1,5 +1,7 @@
 "use strict";
-let { queryToKeyrange, keyrangeToQuery } = require("./querykeyrange"), Index = require("index");
+let { queryToKeyrange, keyrangeToQuery } = require("./querykeyrange"),
+	Index = require("index"),
+	Range = require("range");
 
 module.exports = class State {
 	constructIndex(state) {
@@ -20,13 +22,11 @@ module.exports = class State {
 	
 	populateKnowledge() {
 		for(key in this.indexes) {
-			let index = this.indexes[key];
+			let index = this.indexes[key], range;
+			range = new Range(index[0][index.getQuery().order,index[0][index.getQuery().order);
 			this.knowledge[key] = [];
-			if(index.length) continue;
-			this.knowledge[key].push({
-				start: index[0][index.getQuery().order],
-				end: index[0][index.getQuery().order]
-			});
+			if(!index.length) continue;
+			this.knowledge[key].push(range);
 		}
 	}
 	

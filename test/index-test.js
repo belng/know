@@ -212,9 +212,6 @@ describe("index creation test", function () {
 		assert.equal(index.get(1).time, 4, "Insert error");
 		assert.equal(index.get(2).time, 9, "Insert error");
 		
-		
-		
-		
 		length = index.add({
 			type:"room",
 			id:"ksadjnfkaj",

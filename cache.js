@@ -10,15 +10,56 @@ module.exports = class Cache {
 		this.pending = {};
 		this.recent = {};
 	}
+	findValueInIndex(range, ranges) {
+		if(range.atStart) range.start = 0;
+		if(range.atEnd) return ranges[ranges.length-1].end;
+		if(ranges.start <= ranges[0].start) return ranges[0].start;		
+		for(i=1;i<ranges.length;i++) if(ranges.start <= ranges[i].start) return ranges[i-1].start;
+		return ranges[i-1].start;
+	}
+	function StartsAtRange(start, ranges) {
+		for(i=0;i<ranges.length;i++) {
+			if(start<ranges[i].start) return i-1;
+			if(start>ranges[i].end) continue;
+			return i;
+		}
+		return -1;
+	}
 
 	query(key, range, callback) {
 		let known = this.state.knowledge[key],
-            index = this.state.indexes[key];
-
-        if (!callback && this.pending[key + ":" + range]) {
-            callback = this.pending[key + ":" + range];
-			delete this.pending[key + ":" + range];
+			index = this.state.indexes[key];
+		let rangeIndex = StartsAtRange(range, known), items = [],
+			q = keyrangeToQuery(key, range), item = {};
+			item[q.order] = range.start;
+		let itemIndex = index.findInsertPosition(item);
+		let from, to;
+		if(rangeIndex<0) {
+			if(isPending(q)) items.push["loading"];
+			else items.push["missing"];
+			rangeIndex = 0;
 		}
+		if(q.before) {
+			from = itemIndex - q.before;
+			to = itemIndex;
+		} else {
+			from = itemIndex;
+			to = itemIndex + q.after;
+		}
+
+
+		for(j = from;i<to && j<index.length;j++) {
+			if(known[rangeIndex].end>index[itemIndex][]) {
+				rangeIndex++;
+				items.push("missing");
+
+			}
+			items.push(index[j]);
+		}
+		
+		
+		
+		// We now have the items,queries and knowledge ranges. insert missing and loading in the right position in the result;
 		
 		/*
 			TODO:
@@ -32,6 +73,8 @@ module.exports = class Cache {
 			
 			In either case, update this.recent
 		*/
+		
+		return items;
 	}
 	
 	setState(c) {
