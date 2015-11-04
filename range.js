@@ -1,18 +1,18 @@
-module.exports = class Range() {
+"use strict";
+module.exports = class Range {
 	constructer() {
 		this.atEnd = false;
 		this.atStart = false;
 	}
-	
-	isInRange(start) {
-		if
+
+	isInRange() {
 	}
-	
-	merge(range) {
-			
+
+	merge() {
+
 	}
-	
-	clear(){
+
+	clear() {
 		this.atEnd = false;
 		this.atStart = false;
 	}

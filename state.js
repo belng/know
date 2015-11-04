@@ -1,8 +1,8 @@
 "use strict";
 // let { queryToKeyrange, keyrangeToQuery } = require("./querykeyrange"),
 let keyrangeToQuery = require("./querykeyrange").keyrangeToQuery,
-	Index = require("index"),
-	Range = require("range");
+	Index = require("./index.js"),
+	Range = require("./range.js");
 
 module.exports = class State {
 	constructIndex(state) {
@@ -14,8 +14,8 @@ module.exports = class State {
 
 		for (let id in this.entities) {
 			for (let index in this.indexes) {
-				if (this.indexex[index].shouldIndex(this.entities[id], this.indexex[index])) {
-					this.indexex[index].add(this.entities[id]);
+				if (this.indexes[index].shouldIndex(this.entities[id])) {
+					console.log(this.indexes[index].add(this.entities[id]));
 				}
 			}
 		}
@@ -24,6 +24,7 @@ module.exports = class State {
 	populateKnowledge() {
 		for (let key in this.indexes) {
 			let index = this.indexes[key], range;
+			console.log(index.length, key);
 			range = new Range(index[0][index.getQuery().order], index[0][index.getQuery().order]);
 			this.knowledge[key] = [];
 			if (!index.length) continue;
@@ -32,15 +33,17 @@ module.exports = class State {
 	}
 
 	constructor(initialState) {
-		this.entities = new WeakMap();
+		this.entities = {};
 		this.knowledge = {};
 		this.indexes = {};
 		for (let i in initialState.entities) {
-			if (initialState.hasOwnProperty(i)) {
+			if (initialState.entities.hasOwnProperty(i)) {
 				this.entities[i] = initialState.entities[i];
 			}
 		}
+
 		this.constructIndex(initialState);
+//		console.log("values",this.indexes[Object.keys(this.indexes)[0]]);
 		this.populateKnowledge();
 	}
 };
