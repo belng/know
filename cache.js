@@ -6,10 +6,16 @@ let jsonop = require("jsonop"),
 module.exports = class Cache {
 	constructor(initialState) {
 		this.state = new State(initialState);
+		this._objs = [state];
 		this.listeners = [];
 		this.pending = {};
 		this.recent = {};
+		
+		// Handle situation where called without "new" keyword
+	if (false === (this instanceof Store)) {
+		throw new Error("Must be initialized before use");
 	}
+
 	findValueInIndex(range, ranges) {
 		if(range.atStart) range.start = 0;
 		if(range.atEnd) return ranges[ranges.length-1].end;
@@ -112,12 +118,35 @@ module.exports = class Cache {
 	
 	onChange(fn) { this.listeners.push(fn); }
 	
-	get() {}
-	
+		get() {
+		var args = Array.prototype.slice.call(arguments),
+			value, arr;
+
+		for (var i = this._objs.length, l = 0; i > l; i--) {
+			arr = args.slice(0);
+
+			arr.unshift(this._objs[i - 1]);
+
+			value = objUtils.get.apply(null, arr);
+
+			if (typeof value !== "undefined") {
+				return value;
+			}
+		}
+	}
+	with(obj) {
+		var objs = this._objs.slice(0);
+
+		objs.push(obj);
+
+		return new Store(objs);
+	}
+		
 	// Convenience methods
 	
 	getUsers(options, callback) {
 		/* todo: from options, calculate key and range */
 		query(key, range, callback);
 	}
+	
 };
