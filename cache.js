@@ -9,7 +9,6 @@ let jsonop = require("jsonop"),
 module.exports = class Cache {
 	constructor(initialState) {
 		this.state = new State(initialState);
-		this._objs = [ this.state ];
 		this.listeners = [];
 		this.pending = {};
 		this.recent = {};
@@ -19,7 +18,7 @@ module.exports = class Cache {
 		let i;
 		if (range.atStart) range.start = 0;
 		if (range.atEnd) return ranges[ranges.length - 1].end;
-		if (ranges.start <= ranges[0].start) return ranges[0].start;
+		if (range.start <= ranges[0].start) return ranges[0].start;
 		for (i = 1; i < ranges.length; i++) {
 			if (ranges.start <= ranges[i].start) return ranges[i - 1].start;
 		}

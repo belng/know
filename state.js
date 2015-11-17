@@ -15,12 +15,15 @@ module.exports = class State {
 		for (let id in this.entities) {
 			for (let index in this.indexes) {
 				if (this.indexes[index].shouldIndex(this.entities[id])) {
-					console.log(this.indexes[index].add(this.entities[id]));
+					this.indexes[index].add(this.entities[id]);
 				}
 			}
 		}
 	}
 
+/*
+	will need to think of something different to have correct knowledge.
+	this one fails when there are multiple ranges.
 	populateKnowledge() {
 		for (let key in this.indexes) {
 			let index = this.indexes[key], range;
@@ -31,10 +34,11 @@ module.exports = class State {
 			this.knowledge[key].push(range);
 		}
 	}
+*/
 
 	constructor(initialState) {
 		this.entities = {};
-		this.knowledge = {};
+		this.knowledge = initialState.knowledge;
 		this.indexes = {};
 		for (let i in initialState.entities) {
 			if (initialState.entities.hasOwnProperty(i)) {
@@ -43,7 +47,5 @@ module.exports = class State {
 		}
 
 		this.constructIndex(initialState);
-//		console.log("values",this.indexes[Object.keys(this.indexes)[0]]);
-		this.populateKnowledge();
 	}
 };
