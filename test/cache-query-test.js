@@ -32,6 +32,6 @@ describe("test for query function", function () {
 					atEnd: true
 				} ]
 			}
-		});		
+		});
 	});
 });
