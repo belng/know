@@ -10,14 +10,14 @@ let Cache = require("cache"),
 		[constants.TYPE_USER]: {user: true}
 	},
 	cache = new Cache({
-		isA (entity, type) {
+		is (entity, type) {
 			if (entity.type) {
 				return !!typeMap[entity.type][type];
 			} else {
 				return type === "relation";
 			}
 		},
-		getId (entity) {
+		id (entity) {
 			if (entity.id) {
 				return entity.id;
 			} else {
