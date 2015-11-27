@@ -62,7 +62,9 @@ describe("should insert a new range and query it", function () {
 });
 
 describe("query for cache with infinity in the end", function() {
-	let cache = new Cache();
+	let cache = new Cache({
+		is: (entity, type) => { return type === "relation"; }
+	});
 	cache.put({
 		knowledge: { "relation:roleTime(:)": [ [ 0, +Infinity ] ] },
 		indexes: { "relation:roleTime(:)": [
@@ -87,6 +89,7 @@ describe("query for cache with infinity in the end", function() {
 	});
 	it("query with 3 prop ranges: should give loading in the beginning and add a query.", function () {
 		let res = cache.query("relation:roleTime(:)", [ 3, 2, 3 ]);
+		console.log(res);
 		assert.equal(res.arr.length, 4, "length not correct on ");
 		assert.equal(res.arr[0].type, "loading", "incorrect item");
 		assert.equal(res.arr[1].roleTime, 1, "incorrect item");
@@ -97,9 +100,10 @@ describe("query for cache with infinity in the end", function() {
 });
 
 
-describe.only("should index entities when adding knowledge: ", function () {
-	let cache = new Cache();
-	console.log("starting.");
+describe("should index entities when adding knowledge: ", function () {
+	let cache = new Cache({
+		is: (entity, type) => { return type === "relation"; }
+	});
 	cache.put({
 		entities: {
 			harish_numix: { id: "harish_numix", roleTime: 1 },
@@ -107,10 +111,11 @@ describe.only("should index entities when adding knowledge: ", function () {
 			satya_numix: { id: "satya_numix", roleTime: 6 }
 		}
 	});
-/*	cache.put({
+	cache.put({
 		knowledge: { "relation:roleTime(:)": [ [ 0, +Infinity ] ] }
-	});*/
+	});
 	it("adding knowledge should add the indexes", function() {
+		console.log(cache.indexes);
 		assert(Object.keys(cache.indexes).length, "no index added");
 	});
 });
@@ -120,19 +125,22 @@ describe("deleting an item which is part of an index: ", function () {
 	cache.put({
 		knowledge: { "room:updateTime(:)": [ [ 0, 7 ] ] },
 		indexes: { "room:updateTime(:)": [
-			{ id: "numix", updateTime: 1 },
-			{ id: "scrollback", updateTime: 3 },
-			{ id: "bangalore", updateTime: 6 }
+			{ id: "numix", type: "room", updateTime: 1 },
+			{ id: "scrollback", type: "room", updateTime: 3 },
+			{ id: "bangalore", type: "room", updateTime: 6 }
 		] }
 	});
 
 	cache.put({
-		numix: null
+		entities: {
+			numix: null
+		}
 	});
-
-	it("adding knowledge should add the indexes", function() {
-		let res = cache.query("room:updateTime(:)", [ 1, 5 ]);
-		assert.equal(res.arr[0].id, "numix", "didnt delete");
+	
+	it("item should be deleted", function() {
+		let res = cache.query("room:updateTime(:)", [ 1, 9 ]);
+		console.log(res, cache.entities);
+		assert(res.arr[0].id !== "numix", "didnt delete");
 	});
 });
 
