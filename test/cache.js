@@ -1,5 +1,8 @@
 /* eslint-env mocha */
 /* eslint no-console:0 */
+"use strict";
+
+require("babel-core/register")({sourceMaps: "inline"});
 
 let Cache = require("../lib/Cache"),
 	assert = require("assert"),
@@ -95,7 +98,7 @@ describe("query for cache with infinity in the end", function() {
 		assert.equal(res.get(1).roleTime, 1, "incorrect item");
 		assert.equal(res.get(2).roleTime, 3, "incorrect item");
 		assert.equal(res.get(3).roleTime, 6, "incorrect item");
-		assert(Object.keys(cache.queries), "no queries added");
+		assert(Object.keys(cache.queries).length, "no queries added");
 	});
 });
 
