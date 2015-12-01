@@ -12,6 +12,7 @@
   },
   "author": "scrollback",
   "license": "MIT",
+  "main": "lib/Cache.js"
   "bugs": {
     "url": "https://github.com/scrollback/sbcache/issues"
   },
