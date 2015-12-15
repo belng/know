@@ -1,26 +1,3 @@
-Key
-===
-
-Format of a key, in EBNF:
-```
-key              = type , { join } , ":" , order , filters ;
-join             = "+" , type , "." | "-" , property ;
-order            = property ;
-filters          = "(:)" | "(" , filter , { "," , filter } , ")" ;
-filter           = filterName , ":" , filterValue ;
-filterName       = property , [ filterOp ] ;
-filterOp         = "_", lower_alpha , lower_alpha , [ lower_alpha ] ;
-type             = lower_alpha , { lower_alpha } ;
-property         = lower_alpha , { alpha_num } ;
-```
-
-Notes on the key format
-
-- Joins are sorted alphabetically by full string.
-- Filters are sorted alphabetically by key.
-
-
-
 Compound Types
 ==============
 

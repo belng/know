@@ -5,16 +5,15 @@
 require("babel-core/register")({sourceMaps: "inline"});
 
 let Cache = require("../lib/Cache"),
-	assert = require("assert"),
-	cache;
+	assert = require("assert");
 
 describe("should insert a single entity", function () {
-	let cache = new Cache();
-	let room = {
-		id: "numix",
-		type: "room",
-		description: "GTK+ and Gnome Shell themes."
-	};
+	let cache = new Cache(),
+		room = {
+			id: "numix",
+			type: "room",
+			description: "GTK+ and Gnome Shell themes."
+		};
 	cache.put({ entities: { numix: room }});
 	it("checking if the insert was successful", function(){
 		assert.deepEqual(cache.entities, { numix: room });
@@ -143,6 +142,13 @@ describe("deleting an item which is part of an index: ", function () {
 		assert(res.get(0).id !== "numix", "didnt delete");
 	});
 });
+
+describe("Adding a compound index with values", () => {
+	let cache = new Cache();
+	cache.put({
+		
+	})
+})
 
 /*
 	TODO:
