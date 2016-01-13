@@ -6,7 +6,7 @@ let OrderedArray = require("../lib/OrderedArray"),
 	arr;
 
 beforeEach(() => {
-	arr = new OrderedArray("score", [
+	arr = new OrderedArray(["score"], [
 		{ id: 22, score: 2 },
 		{ id: 44, score: 4 },
 		{ id: 77, score: 7 }
