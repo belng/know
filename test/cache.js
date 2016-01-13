@@ -8,16 +8,17 @@ let Cache = require("../lib/Cache"),
 	assert = require("assert"),
 	cache;
 
-describe("should insert a single entity", function () {
+describe.only("should insert a single entity", function () {
 	let cache = new Cache();
 	let room = {
 		id: "numix",
 		type: "room",
 		description: "GTK+ and Gnome Shell themes."
 	};
-	cache.put({ entities: { numix: room }});
 	it("checking if the insert was successful", function(){
+	cache.put({ entities: { numix: room }});
 		assert.deepEqual(cache.entities, { numix: room });
+		assert.deepEqual(cache.getEntity("numix"), room);
 	});
 });
 
@@ -139,7 +140,7 @@ describe("deleting an item which is part of an index: ", function () {
 			numix: null
 		}
 	});
-	
+
 	it("item should be deleted", function() {
 		let res = cache.query("room:updateTime(:)", [ 1, 9 ]);
 		console.log(res, cache.entities);
