@@ -1,8 +1,8 @@
 {
   "name": "sbcache",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The cache class used in Scrollback",
-  "main": "dist/Cache.js",
+  "main": "lib/Cache.js",
   "scripts": {
     "test": "mocha --compilers js:babel-core/register",
     "prepublish": "./node_modules/babel-cli/bin/babel.js --presets es2015 -d dist/ lib/"
