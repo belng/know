@@ -1,10 +1,11 @@
 {
   "name": "sbcache",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The cache class used in Scrollback",
   "main": "lib/Cache.js",
   "scripts": {
-    "test": "mocha --compilers js:babel-core/register"
+    "test": "mocha --compilers js:babel-core/register",
+    "prepublish": "./node_modules/babel-cli/bin/babel.js --presets es2015 -d dist/ lib/"
   },
   "repository": {
     "type": "git",
@@ -12,7 +13,6 @@
   },
   "author": "scrollback",
   "license": "MIT",
-  "main": "index.js",
   "bugs": {
     "url": "https://github.com/scrollback/sbcache/issues"
   },
@@ -24,6 +24,7 @@
     "setimmediate": "^1.0.4"
   },
   "devDependencies": {
+    "babel-cli": "^6.4.0",
     "babel-core": "^6.2.0",
     "babel-eslint": "^4.1.5",
     "babel-preset-es2015": "^6.1.18",
