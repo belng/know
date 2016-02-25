@@ -7,7 +7,7 @@ require('babel-core/register')({sourceMaps: 'inline'});
 let Cache = require('../lib/Cache'),
 	assert = require('assert');
 
-describe.only('should insert a single entity', function () {
+describe('should insert a single entity', function () {
 	let cache = new Cache();
 	let room = {
 		id: 'numix',
@@ -20,6 +20,15 @@ describe.only('should insert a single entity', function () {
 		assert.deepEqual(cache.entities, { numix: room });
 		assert.deepEqual(cache.getEntity('numix'), room);
 	});
+
+	it('checking if onChange is fired with queries', function(done) {
+		cache.onChange(function(changes) {
+			assert(changes.queries.entities, 'entity query no add');
+			done();
+		});
+		cache.getEntity('harish');
+	});
+
 });
 
 describe('should insert a new range and query it', function () {
