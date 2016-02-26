@@ -21,14 +21,58 @@ describe('should insert a single entity', function () {
 		assert.deepEqual(cache.getEntity('numix'), room);
 	});
 
-	it('checking if onChange is fired with queries', function(done) {
+	it('checking if callback of getEntity is fired if entity doesnt exist', function(done) {
 		cache.onChange(function(changes) {
-			assert(changes.queries.entities, 'entity query no add');
+			assert.deepEqual(changes, {
+				queries: {
+					entities: {
+						alice: true
+					}
+				}
+			}, 'entity query no add');
+			cache.put({
+				entities: {
+					alice: null
+				}
+			});
+		});
+
+		cache.getEntity('alice', function(err, entity) {
+			assert(!err, 'threw an error');
+			assert(!entity, 'entity doesnt exist');
 			done();
 		});
-		cache.getEntity('harish');
 	});
 
+
+	it('checking if callback of getEntity is fired if entity is added later', function(done) {
+		cache.onChange(function(changes) {
+			assert.deepEqual(changes, {
+				queries: {
+					entities: {
+						alice: {
+							id: 'alice',
+							createTime: new Date().getTime(),
+							description: 'stupid day dreamer'
+						}
+					}
+				}
+			}, 'entity query no add');
+			cache.put({
+				entities: {
+					id: 'alice',
+					createTime: new Date().getTime(),
+					description: 'stupid day dreamer'
+				}
+			});
+		});
+
+		cache.getEntity('alice', function(err, entity) {
+			assert(!err, 'threw an error');
+			assert(!entity, 'entity doesnt exist');
+			done();
+		});
+	});
 });
 
 describe('should insert a new range and query it', function () {
