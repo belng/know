@@ -52,7 +52,7 @@ describe('should insert a single entity', function () {
 					entities: {
 						alice: {
 							id: 'alice',
-							createTime: new Date().getTime(),
+							createTime: 140000000,
 							description: 'stupid day dreamer'
 						}
 					}
@@ -61,7 +61,7 @@ describe('should insert a single entity', function () {
 			cache.put({
 				entities: {
 					id: 'alice',
-					createTime: new Date().getTime(),
+					createTime: 140000000,
 					description: 'stupid day dreamer'
 				}
 			});
