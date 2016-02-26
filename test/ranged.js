@@ -1,3 +1,5 @@
+"use strict";
+
 /* eslint-env mocha */
 
 let RangeArray = require('../lib/RangeArray'),
@@ -12,6 +14,7 @@ it('should subtract a whole range', () => {
 	assert.equal(rangeArray.arr[0].start, 6, 'first item start incorrect');
 	assert.equal(rangeArray.arr[0].end, 9, 'first item end incorrect');
 });
+
 it('should subtract part of ranges', () => {
 	let rangeArray = new RangeArray([ {start: 1, end: 4}, {start: 6, end: 9} ]).difference(new RangeArray([ {start: 3, end: 7 } ]));
 
@@ -62,9 +65,9 @@ it('should add an overlapping 3-range at the beginning', () => {
 
 	rangeArray.add({start: 0, end: 2});
 	assert(rangeArray instanceof RangeArray);
-	assert.equal(rangeArray.arr.length, 1, 'length incorrect');
+	assert.equal(rangeArray.arr.length,   1, 'length incorrect');
 	assert.equal(rangeArray.arr[0].start, 0, 'first item start incorrect');
-	assert.equal(rangeArray.arr[0].end, 4, 'first item end incorrect');
+	assert.equal(rangeArray.arr[0].end,   4, 'first item end incorrect');
 });
 
 it('should add a non-overlapping 3-range at the beginning', () => {
@@ -92,4 +95,27 @@ it('should add a non-overlapping 3-range at the beginning', () => {
 it('should JSONify', () => {
 	let rangeArray = new RangeArray([ {start: 1, end: 4} ]);
 	assert(JSON.stringify(rangeArray), 'hooray!!!');
+});
+
+it('should intersect overlapping', () => {
+	let res = new RangeArray([ [1, 3], [5, 7] ])
+		.intersect(new RangeArray([ [2, 6] ]));
+
+	assert.deepEqual(res.arr, [ [2, 3], [5, 6] ]);
+});
+
+it('should intersect to nothing', () => {
+	assert.deepEqual(
+		new RangeArray([ [1, 3] ])
+		.intersect(new RangeArray([ [4, 5] ])).arr,
+		[]
+	);
+});
+
+it('should intersect touching', () => {
+	assert.deepEqual(
+		new RangeArray([ [1, 3] ])
+		.intersect(new RangeArray([ [0, 1], [3, 5] ])).arr,
+		[]
+	);
 });

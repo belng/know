@@ -44,6 +44,7 @@ describe('should insert a new range and query it', function () {
 
 	it('simple query', function() {
 		let res = cache.query('room:updateTime!(:)', [ 1, 5 ]);
+
 		assert.equal(res.get().length, 2, 'incorrect results');
 		assert.equal(res.get(0).updateTime, 1, 'incorrect item');
 		assert.equal(res.get(1).updateTime, 3, 'incorrect item');
@@ -102,6 +103,7 @@ describe('query for cache with infinity in the end', function() {
 	});
 	it('query with 3 prop ranges: should give loading in the beginning and add a query.', function () {
 		let res = cache.query('relation:roleTime!(:)', [ 3, 2, 3 ]);
+
 		assert.equal(res.get().length, 4, 'length not correct on ');
 		assert.equal(res.get(0).type, 'loading', 'incorrect item');
 		assert.equal(res.get(1).roleTime, 1, 'incorrect item');
