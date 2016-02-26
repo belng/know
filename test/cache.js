@@ -166,7 +166,6 @@ describe('Adding a compound index with values', () => {
 /*
 	TODO:
 	Existing entities should be indexed when adding knowledge.
-	Queries should return loading placeholders
 	Queries should be added to cache.queries
 	Cache._recentQueries should be updated
 */
