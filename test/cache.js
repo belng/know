@@ -50,7 +50,9 @@ describe('should insert a single entity', function () {
 	});
 
 
-	it('checking if callback of getEntity is fired if entity is added later', function(done) {
+	it.only('checking if callback of getEntity is fired if entity is added later', function(done) {
+		let callbackFired = false;
+
 		cache.onChange(function(changes) {
 			if (
 				changes.queries && changes.queries.entities &&
@@ -65,13 +67,16 @@ describe('should insert a single entity', function () {
 		});
 
 		cache.getEntity('alice', function(err, entity) {
+			assert(!callbackFired, 'callback fired twice');
+			callbackFired = true;
 			assert(!err, 'threw an error');
 			assert.deepEqual(entity, {
 				id: 'alice',
 				createTime: 140000000,
 				description: 'stupid day dreamer'
 			});
-			done();
+			cache.put({ entities: { alice: null } });
+			setTimeout(done, 100);
 		});
 	});
 });
