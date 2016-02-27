@@ -50,7 +50,7 @@ describe('should insert a single entity', function () {
 	});
 
 
-	it.only('checking if callback of getEntity is fired if entity is added later', function(done) {
+	it('checking if callback of getEntity is fired if entity is added later', function(done) {
 		cache.onChange(function(changes) {
 			if (
 				changes.queries && changes.queries.entities &&
