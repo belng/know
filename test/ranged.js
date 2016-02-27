@@ -70,6 +70,14 @@ it('should add an overlapping 3-range at the beginning', () => {
 	assert.equal(rangeArray.arr[0].end,   4, 'first item end incorrect');
 });
 
+it('should subtract exact ranges to nothing', () => {
+	assert.deepEqual(
+		new RangeArray([ [ 1, 3 ] ])
+		.difference(new RangeArray([ [ 1, 3 ] ])),
+		new RangeArray([])
+	);
+});
+
 it('should add a non-overlapping 3-range at the beginning', () => {
 	let rangeArray = new RangeArray([ {start: 1, end: 4} ]);
 
