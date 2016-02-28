@@ -50,7 +50,7 @@ describe('should insert a single entity', function () {
 	});
 
 
-	it.only('checking if callback of getEntity is fired if entity is added later', function(done) {
+	it('checking if callback of getEntity is fired if entity is added later', function(done) {
 		let callbackFired = false;
 
 		cache.onChange(function(changes) {
@@ -206,10 +206,17 @@ describe('deleting an item which is part of an index: ', function () {
 	});
 });
 
-describe('Adding a compound index with values', () => {
+it("getEntity callback fired when indexes are put", (done) => {
 	let cache = new Cache();
+	cache.getEntity("test123", (err, entity) => {
+		assert.deepEqual(entity, {id: 'test123', type: 'room', updateTime: 3});
+		done();
+	});
 	cache.put({
-
+		knowledge: { 'room:updateTime!(:)': [ [ 0, 7] ] },
+		indexes: { 'room:updateTime!(:)': [
+			{ id: 'test123', type: 'room', updateTime: 3 }
+		] }
 	});
 });
 

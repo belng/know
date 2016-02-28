@@ -18,7 +18,7 @@
   },
   "homepage": "https://github.com/scrollback/sbcache#readme",
   "dependencies": {
-    "jsonop": "^1.0.0",
+    "jsonop": "^2.0.6",
     "juri": "^1.0.2",
     "setimmediate": "^1.0.4"
   },
