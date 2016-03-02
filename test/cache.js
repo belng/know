@@ -128,10 +128,10 @@ describe('should insert a new range and query it', function () {
 		cache.onChange(function() {
 			cache.put({
 				knowledge: {
-					'room:createTime': [ 1, 5 ]
+					'text:createTime': [ 1, 5 ]
 				},
 				indexes: {
-					'room:createTime': [
+					'text:createTime': [
 						{
 							createTime: 1,
 							type: 'text',
@@ -151,7 +151,7 @@ describe('should insert a new range and query it', function () {
 				}
 			});
 		});
-		cache.query(cache.sliceToKey({ type: 'text', order: 'createTime'}), [ 1, 0, 50 ], function(err, data) {
+		cache.query(cache.sliceToKey({ type: 'text', order: 'createTime'}), [ 1, 3 ], function(err, data) {
 			assert(!err, 'Error thrown');
 			assert.equal(data.length, 3, 'callback fired with new items');
 			done();
