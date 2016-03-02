@@ -123,6 +123,40 @@ describe('should insert a new range and query it', function () {
 		assert.equal(res.get(1).updateTime, 3, 'incorrect item');
 		assert.equal(res.get(2).updateTime, 6, 'incorrect item');
 	});
+
+	it('Cache.query should fire callback on geting data', function(done) {
+		cache.onChange(function() {
+			cache.put({
+				knowledge: {
+					'room:updateTime': [ 1, 5 ]
+				},
+				indexes: {
+					'room:updateTime': [
+						{
+							createTime: 1,
+							type: 'text',
+							body: 'hi'
+						},
+						{
+							createTime: 1,
+							type: 'text',
+							body: 'hi'
+						},
+						{
+							createTime: 1,
+							type: 'text',
+							body: 'hi'
+						}
+					]
+				}
+			});
+		});
+		cache.query(cache.sliceToKey({ type: 'text', order: 'createTime'}), [ 1, 0, 50 ], function(err, data) {
+			assert(!err, 'Error thrown');
+			assert.equal(data.length, 3, 'callback fired with new items');
+			done();
+		});
+	});
 });
 
 describe('query for cache with infinity in the end', function() {
