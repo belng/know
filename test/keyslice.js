@@ -39,3 +39,17 @@ it('should key to slice in', () => {
 		order: 'createTime'
 	}, ks.keyToSlice('text-(rel:item):createTime!(thread:t1,user:u1)'));
 });
+
+
+it('two way conversion should result in same object', () => {
+	var x = {
+		type: 'thread',
+		order: 'createtime',
+		filter: {
+			parentsCtd: [ 'abc' ]
+		}
+	};
+	assert.deepEqual(
+		x, ks.keyToSlice(ks.sliceToKey(x))
+	);
+});
