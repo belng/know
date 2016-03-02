@@ -125,31 +125,36 @@ describe('should insert a new range and query it', function () {
 	});
 
 	it('Cache.query should fire callback on geting data', function(done) {
-		cache.onChange(function() {
-			cache.put({
-				knowledge: {
-					'text:createTime': [ 1, 5 ]
-				},
-				indexes: {
-					'text:createTime': [
-						{
-							createTime: 1,
-							type: 'text',
-							body: 'hi'
-						},
-						{
-							createTime: 2,
-							type: 'text',
-							body: 'hi'
-						},
-						{
-							createTime: 3,
-							type: 'text',
-							body: 'hi'
-						}
-					]
-				}
-			});
+		cache.onChange(function(changes) {
+			if (changes.queries && changes.queries["text:createTime"]) {
+				cache.put({
+					knowledge: {
+						'text:createTime': new Cache.RangeArray([ [ 1, 3 ] ])
+					},
+					indexes: {
+						'text:createTime': new Cache.OrderedArray(['createTime'], [
+							{
+								createTime: 1,
+								type: 'text',
+								body: 'hi',
+								id: "aksdfjn"
+							},
+							{
+								createTime: 2,
+								type: 'text',
+								body: 'hi',
+								id: "askdjfkshd"
+							},
+							{
+								createTime: 3,
+								type: 'text',
+								body: 'hi',
+								id: "aksdcilaeukajsn"
+							}
+						])
+					}
+				});
+			}
 		});
 		cache.query(cache.sliceToKey({ type: 'text', order: 'createTime'}), [ 1, 3 ], function(err, data) {
 			assert(!err, 'Error thrown');
