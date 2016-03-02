@@ -128,22 +128,22 @@ describe('should insert a new range and query it', function () {
 		cache.onChange(function() {
 			cache.put({
 				knowledge: {
-					'room:updateTime': [ 1, 5 ]
+					'room:createTime': [ 1, 5 ]
 				},
 				indexes: {
-					'room:updateTime': [
+					'room:createTime': [
 						{
 							createTime: 1,
 							type: 'text',
 							body: 'hi'
 						},
 						{
-							createTime: 1,
+							createTime: 2,
 							type: 'text',
 							body: 'hi'
 						},
 						{
-							createTime: 1,
+							createTime: 3,
 							type: 'text',
 							body: 'hi'
 						}
