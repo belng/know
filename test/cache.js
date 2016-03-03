@@ -172,7 +172,7 @@ describe('should insert a new range and query it', function () {
 		assert.deepEqual(res, new OrderedArray([ 'createTime' ], [
 			{ type: "loading", createTime: 1, start: 1, end: 3 }
 		]));
-		
+
 	});
 });
 
