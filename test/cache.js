@@ -5,6 +5,7 @@
 require('babel-core/register')({sourceMaps: 'inline'});
 
 let Cache = require('../lib/Cache'),
+	OrderedArray = Cache.OrderedArray,
 	assert = require('assert');
 
 describe('should insert a single entity', function () {
@@ -124,7 +125,7 @@ describe('should insert a new range and query it', function () {
 		assert.equal(res.get(2).updateTime, 6, 'incorrect item');
 	});
 
-	it('Cache.query should fire callback on geting data', function(done) {
+	it.only('Cache.query should fire callback on getting data', function(done) {
 		cache.onChange(function(changes) {
 			if (changes.queries && changes.queries["text:createTime"]) {
 				cache.put({
@@ -156,11 +157,22 @@ describe('should insert a new range and query it', function () {
 				});
 			}
 		});
-		cache.query(cache.sliceToKey({ type: 'text', order: 'createTime'}), [ 1, 3 ], function(err, data) {
-			assert(!err, 'Error thrown');
-			assert.equal(data.length, 3, 'callback fired with new items');
-			done();
-		});
+
+		let res = cache.query(
+			cache.sliceToKey({ type: 'text', order: 'createTime'}),
+			[ 1, 3 ],
+			function(err, data) {
+				console.log("ha");
+				assert(!err, 'Error thrown');
+				assert.equal(data.length, 3, 'callback fired with new items');
+				done();
+			}
+		);
+
+		assert.deepEqual(res, new OrderedArray([ 'createTime' ], [
+			{ type: "loading", createTime: 1, start: 1, end: 3 }
+		]));
+		
 	});
 });
 
