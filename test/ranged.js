@@ -127,3 +127,23 @@ it('should intersect touching', () => {
 		[]
 	);
 });
+
+
+it ('should subtract full range from 3-range', () => {
+	console.log("starting");
+
+	assert.deepEqual(
+		new RangeArray([ [Infinity, 100, 0]])
+		.difference(new RangeArray([ [ -Infinity, Infinity ] ])),
+		new RangeArray([])
+	);
+});
+
+
+it.only('should subtract 3-range from full range', () => {
+	assert.deepEqual(
+		new RangeArray([ [ -Infinity, Infinity ] ])
+		.difference(new RangeArray([ [ Infinity, 100, 0 ] ])),
+		new RangeArray([ [ -Infinity, Infinity ] ])
+	);
+});
