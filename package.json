@@ -1,7 +1,7 @@
 {
-  "name": "sbcache",
+  "name": "know",
   "version": "1.0.5",
-  "description": "The cache class used in Scrollback",
+  "description": "A data structure cache that knows what it doesn’t know.",
   "main": "dist/Cache.js",
   "scripts": {
     "test": "mocha --compilers js:babel-core/register",
@@ -9,14 +9,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/scrollback/sbcache.git"
+    "url": "git+https://github.com/scrollback/know.git"
   },
   "author": "scrollback",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/scrollback/sbcache/issues"
+    "url": "https://github.com/scrollback/know/issues"
   },
-  "homepage": "https://github.com/scrollback/sbcache#readme",
+  "homepage": "https://github.com/scrollback/know#readme",
   "dependencies": {
     "jsonop": "^2.0.6",
     "juri": "^1.0.2",
