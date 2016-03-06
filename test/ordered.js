@@ -1,7 +1,8 @@
 /* eslint-env mocha */
 'use strict';
 
-let OrderedArray = require('../lib/OrderedArray'),
+	let OrderedArray = require('../lib/OrderedArray'),
+	RangeArray =  require('../lib/RangeArray'),
 	assert = require('assert'),
 	arr;
 
@@ -43,4 +44,10 @@ it('indexOf before first', () => {
 
 it('indexOf after last', () => {
 	assert.equal(arr.indexOf(9), 3);
+});
+
+
+it('getRange on empty range', () => {
+	let range = new OrderedArray([]).getRange();
+	assert.deepEqual(new RangeArray([ range ]), new RangeArray([ [ -Infinity, Infinity ] ]));
 });

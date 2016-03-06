@@ -147,3 +147,20 @@ it.only('should subtract 3-range from full range', () => {
 		new RangeArray([ [ -Infinity, Infinity ] ])
 	);
 });
+
+
+it('intersect with itself should give the same', () => {
+	assert.deepEqual(
+		new RangeArray([ [ -Infinity, +Infinity ] ])
+		.intersect(new RangeArray([ [ -Infinity, Infinity ] ])),
+		new RangeArray([ [ -Infinity, Infinity ] ])
+	);
+});
+
+it.only('difference with complete knowledge with 3-range query', () => {
+	assert.deepEqual(
+		new RangeArray([ [ -Infinity, +Infinity ] ])
+		.difference(new RangeArray([ [ Infinity, 100, 0 ] ])),
+		new RangeArray([ ])
+	);
+});
