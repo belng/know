@@ -49,5 +49,5 @@ it('indexOf after last', () => {
 
 it('getRange on empty range', () => {
 	let range = new OrderedArray([]).getRange();
-	assert.deepEqual(new RangeArray([ range ]), new RangeArray([ [ -Infinity, Infinity ] ]));
+	assert.deepEqual(range, new RangeArray([ [ -Infinity, Infinity ] ]));
 });
