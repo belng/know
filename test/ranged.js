@@ -130,8 +130,6 @@ it('should intersect touching', () => {
 
 
 it ('should subtract full range from 3-range', () => {
-	console.log("starting");
-
 	assert.deepEqual(
 		new RangeArray([ [Infinity, 100, 0]])
 		.difference(new RangeArray([ [ -Infinity, Infinity ] ])),
