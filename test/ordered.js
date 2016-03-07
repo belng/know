@@ -51,3 +51,9 @@ it('getRange on empty range', () => {
 	let range = new OrderedArray([]).getRange();
 	assert.deepEqual(range, new RangeArray([ [ -Infinity, Infinity ] ]));
 });
+
+
+it('getRange on array with one item', () => {
+	let range = new OrderedArray([ 'time' ], [ {id: 'askdjnf', time: 4} ]).getRange();
+	assert.deepEqual(range, new RangeArray([ [ 4, 4 ] ]));
+});
