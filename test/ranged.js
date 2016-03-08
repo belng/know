@@ -168,6 +168,15 @@ it('difference with complete knowledge with 3-range query', () => {
 	assert.deepEqual(
 		new RangeArray([ [ -Infinity, +Infinity ] ])
 		.difference(new RangeArray([ [ Infinity, 100, 0 ] ])),
-		new RangeArray([ ])
+		new RangeArray([ [ -Infinity, +Infinity ] ])
+	);
+});
+
+
+it('difference with complete knowledge with empty', () => {
+	assert.deepEqual(
+		new RangeArray([ [ -Infinity, +Infinity ] ])
+		.difference(new RangeArray([ ])),
+		new RangeArray([ [ -Infinity, +Infinity ] ])
 	);
 });
