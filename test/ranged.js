@@ -130,8 +130,6 @@ it('should intersect touching', () => {
 
 
 it ('should subtract full range from 3-range', () => {
-	console.log("starting");
-
 	assert.deepEqual(
 		new RangeArray([ [Infinity, 100, 0]])
 		.difference(new RangeArray([ [ -Infinity, Infinity ] ])),
@@ -140,7 +138,7 @@ it ('should subtract full range from 3-range', () => {
 });
 
 
-it.only('should subtract 3-range from full range', () => {
+it('should subtract 3-range from full range', () => {
 	assert.deepEqual(
 		new RangeArray([ [ -Infinity, Infinity ] ])
 		.difference(new RangeArray([ [ Infinity, 100, 0 ] ])),
@@ -157,10 +155,28 @@ it('intersect with itself should give the same', () => {
 	);
 });
 
-it.only('difference with complete knowledge with 3-range query', () => {
+
+it('difference with complete knowledge with 2-range query', () => {
+	assert.deepEqual(
+		new RangeArray([ [ -Infinity, +Infinity ] ])
+		.difference(new RangeArray([ [ -Infinity, +Infinity ] ])),
+		new RangeArray([ ])
+	);
+});
+
+it('difference with complete knowledge with 3-range query', () => {
 	assert.deepEqual(
 		new RangeArray([ [ -Infinity, +Infinity ] ])
 		.difference(new RangeArray([ [ Infinity, 100, 0 ] ])),
-		new RangeArray([ ])
+		new RangeArray([ [ -Infinity, +Infinity ] ])
+	);
+});
+
+
+it('difference with complete knowledge with empty', () => {
+	assert.deepEqual(
+		new RangeArray([ [ -Infinity, +Infinity ] ])
+		.difference(new RangeArray([ ])),
+		new RangeArray([ [ -Infinity, +Infinity ] ])
 	);
 });
