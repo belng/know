@@ -2,8 +2,12 @@
 
 /* eslint-env mocha */
 
-let RangeArray = require('../lib/RangeArray'),
+require('babel-register')({sourceMaps: 'inline'});
+
+let RangeArray = require('../lib/RangeArray').default,
 	assert = require('assert');
+
+console.log(RangeArray);
 
 it('should subtract a whole range', () => {
 	let rangeArray = new RangeArray([
@@ -179,4 +183,31 @@ it('difference with complete knowledge with empty', () => {
 		.difference(new RangeArray([ ])),
 		new RangeArray([ [ -Infinity, +Infinity ] ])
 	);
+});
+
+
+it('intersection with a point range', () => {
+	assert.deepEqual(
+		new RangeArray([[-Infinity, Infinity]])
+		.intersect(new RangeArray([[25, 25]])),
+		new RangeArray([[25, 25]])
+	)
+})
+
+
+it('intersection with a point range reverse', () => {
+	assert.deepEqual(
+		new RangeArray([[25, 25]])
+		.intersect(new RangeArray([[-Infinity, Infinity]])),
+		new RangeArray([[25, 25]])
+	)
+});
+
+
+it.only('intersection with a point range reverse', () => {
+	assert.deepEqual(
+		new RangeArray([[25, 25]])
+		.intersect(new RangeArray([[25, 25]])),
+		new RangeArray([[25, 25]])
+	)
 });
