@@ -20,7 +20,7 @@ it('should handle infinities correctly', () => {
 				{ id: "blahblah", type: "text", createTime: 25 }
 			])
 		),
-		new RangeArray([[-Infinity, Infinity]])
+		new RangeArray([[25, Infinity]])
 	);
 
 });

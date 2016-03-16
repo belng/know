@@ -195,7 +195,7 @@ it('intersection full range with point range', () => {
 
 it('intersection point range with full range', () => {
 	assert.deepEqual(
-		new RangeArray([[25, 25]])
+		new RangeArray([[-Infinity, 25]])
 		.intersect(new RangeArray([[-Infinity, Infinity]])),
 		new RangeArray([[25, 25]])
 	);
@@ -208,4 +208,13 @@ it('intersection point with point', () => {
 		.intersect(new RangeArray([[25, 25]])),
 		new RangeArray([[25, 25]])
 	);
+});
+
+
+it.only('intersection with half Infinity range:', () => {
+	assert.deepEqual(
+		new RangeArray([[25, Infinity]])
+		.intersect(new RangeArray([[-Infinity, +Infinity]])),
+		new RangeArray([[25, Infinity]])
+	)
 });
