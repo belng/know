@@ -82,19 +82,17 @@ it('should subtract exact ranges to nothing', () => {
 	);
 });
 
-it('should add a non-overlapping 3-range at the beginning', () => {
+it('should add a non-overlapping 2-range at the beginning', () => {
 	let rangeArray = new RangeArray([ {start: 1, end: 4} ]);
-
 	rangeArray.add({start: -1, end: 0});
-	assert(rangeArray instanceof RangeArray);
-	assert.equal(rangeArray.arr.length, 2, 'length incorrect');
-	assert.equal(rangeArray.arr[0].start, -1, 'first item start incorrect');
-	assert.equal(rangeArray.arr[0].end, 0, 'first item end incorrect');
-	assert.equal(rangeArray.arr[1].start, 1, 'second item start incorrect');
-	assert.equal(rangeArray.arr[1].end, 4, 'second item end incorrect');
+
+	assert.deepEqual(rangeArray, new RangeArray([
+		{ start: -1, end: 0 },
+		{ start: 1, end: 4 }
+	]));
 });
 
-it('should add a non-overlapping 3-range at the beginning', () => {
+it('should add a touching 2-range at the beginning', () => {
 	let rangeArray = new RangeArray([ {start: 1, end: 4} ]);
 
 	rangeArray.add({start: 0, end: 1});
@@ -186,28 +184,28 @@ it('difference with complete knowledge with empty', () => {
 });
 
 
-it('intersection with a point range', () => {
+it('intersection full range with point range', () => {
 	assert.deepEqual(
 		new RangeArray([[-Infinity, Infinity]])
 		.intersect(new RangeArray([[25, 25]])),
 		new RangeArray([[25, 25]])
-	)
-})
+	);
+});
 
 
-it('intersection with a point range reverse', () => {
+it('intersection point range with full range', () => {
 	assert.deepEqual(
 		new RangeArray([[25, 25]])
 		.intersect(new RangeArray([[-Infinity, Infinity]])),
 		new RangeArray([[25, 25]])
-	)
+	);
 });
 
 
-it.only('intersection with a point range reverse', () => {
+it('intersection point with point', () => {
 	assert.deepEqual(
 		new RangeArray([[25, 25]])
 		.intersect(new RangeArray([[25, 25]])),
 		new RangeArray([[25, 25]])
-	)
+	);
 });
