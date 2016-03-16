@@ -197,17 +197,26 @@ it('intersection with a point range', () => {
 
 it('intersection with a point range reverse', () => {
 	assert.deepEqual(
-		new RangeArray([[25, 25]])
+		new RangeArray([[-Infinity, 25]])
 		.intersect(new RangeArray([[-Infinity, Infinity]])),
 		new RangeArray([[25, 25]])
 	)
 });
 
 
-it.only('intersection with a point range reverse', () => {
+it('intersection with a point range reverse', () => {
 	assert.deepEqual(
 		new RangeArray([[25, 25]])
 		.intersect(new RangeArray([[25, 25]])),
 		new RangeArray([[25, 25]])
+	)
+});
+
+
+it.only('intersection with half Infinity range:', () => {
+	assert.deepEqual(
+		new RangeArray([[25, Infinity]])
+		.intersect(new RangeArray([[-Infinity, +Infinity]])),
+		new RangeArray([[25, Infinity]])
 	)
 });

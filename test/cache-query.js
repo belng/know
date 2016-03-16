@@ -4,7 +4,7 @@
 
 require('babel-core/register')({sourceMaps: 'inline'});
 
-let Cache = require('../lib/Cache'),
+let Cache = require('../lib/Cache').default,
 	RangeArray = Cache.RangeArray,
 	assert = require('assert');
 
