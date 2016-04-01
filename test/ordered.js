@@ -139,9 +139,6 @@ it('slice with a 3 range[-Infinity, 0, after]', () => {
 		{id: 'askdjnfp', time: 6},
 	]);
 
-
-	console.log(orderedArray.slice(-Infinity, 0, 3));
-
 	assert.deepEqual(
 		orderedArray.slice(-Infinity, 0, 3),
 		new OrderedArray(['time'], [
@@ -152,14 +149,12 @@ it('slice with a 3 range[-Infinity, 0, after]', () => {
 	);
 });
 
-it.only('slice with a 3 range[Infinity, before, 0] inclusive', () => {
+it('slice with a 3 range[Infinity, before, 0] inclusive', () => {
 	let orderedArray = new OrderedArray([ 'time' ], [
 		{id: 'askdjnf', time: 4},
 		{id: 'askdjnfj', time: 5},
 		{id: 'askdjnfp', time: 6},
 	]);
-
-	console.log(orderedArray.slice(Infinity, 3, 0));
 
 	assert.deepEqual(
 		orderedArray.slice(Infinity, 3, 0),
