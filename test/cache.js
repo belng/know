@@ -4,7 +4,7 @@
 
 require('babel-core/register')({sourceMaps: 'inline'});
 
-let Cache = require('../lib/Cache'),
+let Cache = require('../lib/Cache').default,
 	OrderedArray = Cache.OrderedArray,
 	assert = require('assert');
 
@@ -125,34 +125,36 @@ describe('should insert a new range and query it', function () {
 		assert.equal(res.get(2).updateTime, 6, 'incorrect item');
 	});
 
-	it.only('Cache.query should fire callback on getting data', function(done) {
+	it('Cache.query should fire callback on getting data', function(done) {
 		cache.onChange(function(changes) {
-			if (changes.queries && changes.queries["text:createTime"]) {
+			if (changes.queries && changes.queries['text:createTime']) {
 				cache.put({
 					knowledge: {
 						'text:createTime': new Cache.RangeArray([ [ 1, 3 ] ])
 					},
 					indexes: {
-						'text:createTime': new Cache.OrderedArray(['createTime'], [
-							{
-								createTime: 1,
-								type: 'text',
-								body: 'hi',
-								id: "aksdfjn"
-							},
-							{
-								createTime: 2,
-								type: 'text',
-								body: 'hi',
-								id: "askdjfkshd"
-							},
-							{
-								createTime: 3,
-								type: 'text',
-								body: 'hi',
-								id: "aksdcilaeukajsn"
-							}
-						])
+						'text:createTime': new Cache.OrderedArray(
+							[ 'createTime' ], [
+								{
+									createTime: 1,
+									type: 'text',
+									body: 'hi',
+									id: 'aksdfjn'
+								},
+								{
+									createTime: 2,
+									type: 'text',
+									body: 'hi',
+									id: 'askdjfkshd'
+								},
+								{
+									createTime: 3,
+									type: 'text',
+									body: 'hi',
+									id: 'aksdcilaeukajsn'
+								}
+							]
+						)
 					}
 				});
 			}
@@ -264,7 +266,7 @@ it("getEntity callback fired when indexes are put", (done) => {
 		done();
 	});
 	cache.put({
-		knowledge: { 'room:updateTime!(:)': [ [ 0, 7] ] },
+		knowledge: { 'room:updateTime!(:)': [ [ 0, 7 ] ] },
 		indexes: { 'room:updateTime!(:)': [
 			{ id: 'test123', type: 'room', updateTime: 3 }
 		] }
