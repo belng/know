@@ -60,7 +60,7 @@ it('getRange on array with one item', () => {
 
 
 
-it.only('slice with a 3 range', () => {
+it.only('slice with a 3 range[start, before, 0] inclusive', () => {
 	let orderedArray = new OrderedArray([ 'time' ], [
 		{id: 'askdjnf', time: 4},
 		{id: 'askdjnfj', time: 5},
@@ -78,7 +78,7 @@ it.only('slice with a 3 range', () => {
 });
 
 
-it.only('slice with a 3 range', () => {
+it.only('slice with a 3 range[start, before, 0]', () => {
 	let orderedArray = new OrderedArray([ 'time' ], [
 		{id: 'askdjnf', time: 4},
 		{id: 'askdjnfj', time: 5},
@@ -87,6 +87,41 @@ it.only('slice with a 3 range', () => {
 
 	assert.deepEqual(
 		orderedArray.slice(7, 3, 0),
+		new OrderedArray(['time'], [
+			{id: 'askdjnf', time: 4},
+			{id: 'askdjnfj', time: 5},
+			{id: 'askdjnfp', time: 6},
+		])
+	);
+});
+
+it('slice with a 3 range[start, 0, after]', () => {
+	let orderedArray = new OrderedArray([ 'time' ], [
+		{id: 'askdjnf', time: 4},
+		{id: 'askdjnfj', time: 5},
+		{id: 'askdjnfp', time: 6},
+	]);
+
+	assert.deepEqual(
+		orderedArray.slice(4, 0, 3),
+		new OrderedArray(['time'], [
+			{id: 'askdjnf', time: 4},
+			{id: 'askdjnfj', time: 5},
+			{id: 'askdjnfp', time: 6},
+		])
+	);
+});
+
+
+it('slice with a 3 range[start, 0, after]', () => {
+	let orderedArray = new OrderedArray([ 'time' ], [
+		{id: 'askdjnf', time: 4},
+		{id: 'askdjnfj', time: 5},
+		{id: 'askdjnfp', time: 6},
+	]);
+
+	assert.deepEqual(
+		orderedArray.slice(3, 0, 3),
 		new OrderedArray(['time'], [
 			{id: 'askdjnf', time: 4},
 			{id: 'askdjnfj', time: 5},
