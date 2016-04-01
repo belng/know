@@ -2,9 +2,11 @@
 'use strict';
 
 	let OrderedArray = require('../lib/OrderedArray'),
-	RangeArray =  require('../lib/RangeArray'),
+	RangeArray =  require('../lib/RangeArray').default,
 	assert = require('assert'),
 	arr;
+
+console.log(RangeArray);
 
 beforeEach(() => {
 	arr = new OrderedArray([ 'score' ], [
@@ -60,7 +62,7 @@ it('getRange on array with one item', () => {
 
 
 
-it.only('slice with a 3 range[start, before, 0] inclusive', () => {
+it('slice with a 3 range[start, before, 0] inclusive', () => {
 	let orderedArray = new OrderedArray([ 'time' ], [
 		{id: 'askdjnf', time: 4},
 		{id: 'askdjnfj', time: 5},
@@ -78,7 +80,7 @@ it.only('slice with a 3 range[start, before, 0] inclusive', () => {
 });
 
 
-it.only('slice with a 3 range[start, before, 0]', () => {
+it('slice with a 3 range[start, before, 0]', () => {
 	let orderedArray = new OrderedArray([ 'time' ], [
 		{id: 'askdjnf', time: 4},
 		{id: 'askdjnfj', time: 5},
