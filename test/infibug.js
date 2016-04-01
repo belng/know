@@ -23,3 +23,28 @@ it('infinite ranges should not be queried unnecessarily', (done) => {
 
 	cache.query('asdf:xyz!(:)', [12345, 20, 0], () => {});
 });
+
+
+it.only('should avoid duplicates', () => {
+	let cache = new Cache();
+
+	cache.put({
+		knowledge: {'asdf:xyz!(:)': [[ 10, Infinity ]]},
+		indexes: {'asdf:xyz!(:)': [
+			{ id: 1, type: 'asdf', xyz: 10},
+			{ id: 2, type: 'asdf', xyz: 12}
+		]}
+	});
+
+	console.log(cache.indexes['asdf:xyz!(:)'].arr);
+
+	cache.put({
+		knowledge: { 'asdf:xyz!(:)': [ [ 5, 10 ] ] },
+		indexes: { 'asdf:xyz!(:)': [
+			{ id: 5, type: 'asdf', xyz: 5 },
+			{ id: 4, type: 'asdf', xyz: 7 },
+			{ id: 1, type: 'asdf', xyz: 10 }
+		] }
+	});
+	console.log(cache.indexes['asdf:xyz!(:)'].arr);
+});
