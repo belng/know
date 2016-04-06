@@ -9,15 +9,6 @@ let Cache = require('../lib/Cache').default,
 	RangeArray = Cache.RangeArray,
 	assert = require('assert'),
 	util = require('util');
-//
-// Object.prototype.inspect = function (depth, options) {
-// 	return util.inspect(this, {
-// 		showHidden: false,
-// 		depth: null,
-// 		colors: true,
-// 		customInspect: false
-// 	});
-// };
 
 describe('link', () => {
 	let cache = new Cache();
