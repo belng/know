@@ -1,6 +1,6 @@
 {
   "name": "know",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A data structure cache that knows what it doesn’t know.",
   "main": "dist/Cache.js",
   "scripts": {
