@@ -25,7 +25,7 @@ it('infinite ranges should not be queried unnecessarily', (done) => {
 });
 
 
-it.only('should avoid duplicates', () => {
+it('should avoid duplicates', () => {
 	let cache = new Cache();
 
 	cache.put({
@@ -47,4 +47,13 @@ it.only('should avoid duplicates', () => {
 		] }
 	});
 	console.log(cache.indexes['asdf:xyz!(:)'].arr);
+});
+
+
+it('should emit changes, not full objects', () => {
+	let cache = new Cache();
+
+	cache.put({
+		entities: { one: { id: 'one', type: 'asdf', xyz: 10} }
+	});
 });
