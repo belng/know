@@ -13,10 +13,16 @@ let Cache = require('../lib/Cache').default,
 it('should fire one onchange', (done) => {
 	let cache = new Cache();
 
-	cache.onChange(changes => console.dir(changes, {depth:null}));
+	cache.onChange(changes => {
+		assert.deepEqual(changes, {
+			entities: {
+				foo: { id: 'foo', type: 'boo' },
+				bar: { id: 'bar', type: 'boo' }
+			}
+		});
+		done();
+	});
 
 	cache.put({ entities: { foo: { id: 'foo', type: 'boo' } } });
 	cache.put({ entities: { bar: { id: 'bar', type: 'boo' } } });
-
-	setTimeout(done, 50);
 });
