@@ -28,3 +28,13 @@ it('should handle infinities correctly', () => {
 	);
 
 });
+
+it('should return infinity for empty', () => {
+	let cache = new Cache();
+	assert.deepEqual(cache.countedToBounded(
+		RangeArray.makeRange([Infinity, 3, 0]),
+		new OrderedArray(['asdf'], [])
+	), new RangeArray(
+		[[-Infinity, Infinity]]
+	))
+});
