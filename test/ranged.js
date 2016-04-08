@@ -12,7 +12,8 @@ it('should subtract a whole range', () => {
 		{start: 1, end: 4}, {start: 6, end: 9}
 	]).difference(new RangeArray([ {start: 1, end: 4} ]));
 	assert(rangeArray instanceof RangeArray);
-	assert.equal(rangeArray.arr.length, 1, 'length incorrect');
+	console.log(rangeArray.arr);
+	assert.equal(rangeArray.arr.length, 1, rangeArray.arr);
 	assert.equal(rangeArray.arr[0].start, 6, 'first item start incorrect');
 	assert.equal(rangeArray.arr[0].end, 9, 'first item end incorrect');
 });
@@ -223,3 +224,12 @@ it('intersection with half Infinity range:', () => {
 		new RangeArray([[25, Infinity]])
 	)
 });
+
+it('difference of full with full', () => {
+	console.log('test starting');
+	assert.deepEqual(
+		new RangeArray([[Infinity, Infinity]])
+		.difference(new RangeArray([[-Infinity, Infinity]])),
+		new RangeArray()
+	);
+})
