@@ -7,14 +7,13 @@ require('babel-register')({sourceMaps: 'inline'});
 let RangeArray = require('../lib/RangeArray').default,
 	assert = require('assert');
 
-console.log(RangeArray);
-
 it('should subtract a whole range', () => {
 	let rangeArray = new RangeArray([
 		{start: 1, end: 4}, {start: 6, end: 9}
 	]).difference(new RangeArray([ {start: 1, end: 4} ]));
 	assert(rangeArray instanceof RangeArray);
-	assert.equal(rangeArray.arr.length, 1, 'length incorrect');
+	console.log(rangeArray.arr);
+	assert.equal(rangeArray.arr.length, 1, rangeArray.arr);
 	assert.equal(rangeArray.arr[0].start, 6, 'first item start incorrect');
 	assert.equal(rangeArray.arr[0].end, 9, 'first item end incorrect');
 });
@@ -126,7 +125,7 @@ it('should intersect touching', () => {
 	assert.deepEqual(
 		new RangeArray([ [1, 3] ])
 		.intersect(new RangeArray([ [0, 1], [3, 5] ])).arr,
-		[]
+		[[1, 1], [3, 3]]
 	);
 });
 
@@ -195,12 +194,19 @@ it('intersection full range with point range', () => {
 
 it('intersection point range with full range', () => {
 	assert.deepEqual(
-		new RangeArray([[-Infinity, 25]])
+		new RangeArray([[25, 25]])
 		.intersect(new RangeArray([[-Infinity, Infinity]])),
 		new RangeArray([[25, 25]])
 	);
 });
 
+it('intersection finite range with point range at end', () => {
+	assert.deepEqual(
+		new RangeArray([[15, 25]])
+		.intersect(new RangeArray([[25, 25]])),
+		new RangeArray([[25, 25]])
+	);
+});
 
 it('intersection point with point', () => {
 	assert.deepEqual(
@@ -211,10 +217,19 @@ it('intersection point with point', () => {
 });
 
 
-it.only('intersection with half Infinity range:', () => {
+it('intersection with half Infinity range:', () => {
 	assert.deepEqual(
 		new RangeArray([[25, Infinity]])
 		.intersect(new RangeArray([[-Infinity, +Infinity]])),
 		new RangeArray([[25, Infinity]])
 	)
 });
+
+it('difference of full with full', () => {
+	console.log('test starting');
+	assert.deepEqual(
+		new RangeArray([[Infinity, Infinity]])
+		.difference(new RangeArray([[-Infinity, Infinity]])),
+		new RangeArray()
+	);
+})

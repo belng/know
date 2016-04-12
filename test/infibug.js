@@ -17,7 +17,10 @@ it('infinite ranges should not be queried unnecessarily', (done) => {
 	});
 
 	cache.onChange((changes) => {
-		console.log("HERE!", changes.queries['asdf:xyz!(:)']);
+		assert.deepEqual(
+			changes.queries['asdf:xyz!(:)'].arr,
+			[ [ 12345, 20, 0 ] ]
+		);
 		done();
 	});
 
@@ -25,7 +28,7 @@ it('infinite ranges should not be queried unnecessarily', (done) => {
 });
 
 
-it.only('should avoid duplicates', () => {
+it('should avoid duplicates', () => {
 	let cache = new Cache();
 
 	cache.put({
@@ -36,8 +39,6 @@ it.only('should avoid duplicates', () => {
 		]}
 	});
 
-	console.log(cache.indexes['asdf:xyz!(:)'].arr);
-
 	cache.put({
 		knowledge: { 'asdf:xyz!(:)': [ [ 5, 10 ] ] },
 		indexes: { 'asdf:xyz!(:)': [
@@ -46,5 +47,11 @@ it.only('should avoid duplicates', () => {
 			{ id: 1, type: 'asdf', xyz: 10 }
 		] }
 	});
-	console.log(cache.indexes['asdf:xyz!(:)'].arr);
+
+	assert.deepEqual(cache.indexes['asdf:xyz!(:)'].arr, [
+		{ id: 5, type: 'asdf', xyz: 5 },
+		{ id: 4, type: 'asdf', xyz: 7 },
+		{ id: 1, type: 'asdf', xyz: 10 },
+		{ id: 2, type: 'asdf', xyz: 12}
+	]);
 });
