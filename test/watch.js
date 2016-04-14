@@ -8,7 +8,7 @@ let Cache = require('../lib/Cache').default,
 	RangeArray = Cache.RangeArray,
 	OrderedArray = Cache.OrderedArray;
 
-it.only('should fire onchange when one entity in list changes', (done) => {
+it('should fire onchange when one entity in list changes', (done) => {
 	const cache = new Cache({});
 
 	cache.put({

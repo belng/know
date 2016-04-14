@@ -33,7 +33,7 @@ it('+Infinity queries should be clamped', () => {
 	cache.query('text:createTime', [ Infinity, 10, 10 ]);
 });
 
-it.only('Empty results', (done) => {
+it('Empty results', (done) => {
 	let cache = new Cache();
 
 	cache.onChange(change => {

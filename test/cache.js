@@ -164,7 +164,6 @@ describe('should insert a new range and query it', function () {
 			cache.sliceToKey({ type: 'text', order: 'createTime'}),
 			[ 1, 3 ],
 			function(err, data) {
-				console.log("ha");
 				assert(!err, 'Error thrown');
 				assert.equal(data.length, 3, 'callback fired with new items');
 				done();
