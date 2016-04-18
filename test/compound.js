@@ -15,94 +15,94 @@ describe('link', () => {
 
 	it ('first put', () => {
 		cache.put({
-			knowledge: { 'rel-(room:item):roleTime!(user:asdf)': new RangeArray(
+			knowledge: { 'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new RangeArray(
 				[[-Infinity, 5]]
 			)},
-			indexes: { 'rel-(room:item):roleTime!(user:asdf)': new OrderedArray(
+			indexes: { 'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new OrderedArray(
 				['rel', 'roleTime'],
 				[{
-					rel: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4 },
+					rel: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
 					room: { id: 'aa', type: 'room' }
 				}]
 			)}
 		});
 		assert.deepEqual(cache.entities, {
 			aa_asdf: {
-				id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4
+				id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3]
 			},
 			aa: { id: 'aa', type: 'room' }
 		});
 		assert.deepEqual(cache.indexes, {
-			'rel-(room:item):roleTime!(user:asdf)': new OrderedArray(
+			'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new OrderedArray(
 				[ 'roleTime' ],
 				[{
-					id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf',roleTime: 4
+					id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf',roleTime: 4, roles: [41, 3]
 				}]
 			),
-			'rel-(room:item)/item!(user:asdf)': {
-				aa: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf',roleTime: 4 }
+			'rel-(room:item)/item!(roles~Scts:(+3),user:asdf)': {
+				aa: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf',roleTime: 4, roles: [41, 3] }
 			}
 		});
 	});
 
 	it ('second put', () => {
 		cache.put({
-			knowledge: { 'rel-(room:item):roleTime!(user:asdf)': new RangeArray(
+			knowledge: { 'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new RangeArray(
 				[[5, Infinity]]
 			)},
-			indexes: { 'rel-(room:item):roleTime!(user:asdf)': new OrderedArray(
+			indexes: { 'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new OrderedArray(
 				[ 'rel', 'roleTime' ],
 				[ {
-					rel: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf',roleTime: 7 },
+					rel: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf',roleTime: 7, roles: [41, 3] },
 					room: { id: 'bb', type: 'room' }
 				}, {
-					rel: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf',roleTime: 8 },
+					rel: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf',roleTime: 8, roles: [41, 3] },
 					room: { id: 'cc', type: 'room' }
 				} ]
 			)}
 		});
 		assert.deepEqual(cache.entities, {
 			aa_asdf: {
-				id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf',roleTime: 4
+				id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf',roleTime: 4, roles: [41, 3]
 			},
 			aa: { id: 'aa', type: 'room' },
 			bb_asdf: {
-				id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf',roleTime: 7
+				id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf',roleTime: 7, roles: [41, 3]
 			},
 			bb: { id: 'bb', type: 'room' },
 			cc_asdf: {
-				id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8
+				id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3]
 			},
 			cc: { id: 'cc', type: 'room' }
 		});
 		assert.deepEqual(cache.indexes, {
-			'rel-(room:item):roleTime!(user:asdf)': new OrderedArray(
+			'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new OrderedArray(
 				[ 'roleTime' ],
 				[ {
-					id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4
+					id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3]
 				}, {
-					id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7
+					id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3]
 				}, {
-					id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8
+					id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3]
 				} ]
 			),
-			'rel-(room:item)/item!(user:asdf)': {
-				aa: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4 },
-				bb: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7 },
-				cc: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8 }
+			'rel-(room:item)/item!(roles~Scts:(+3),user:asdf)': {
+				aa: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
+				bb: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
+				cc: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] }
 			}
 		});
 	});
 
 	it ('query', () => {
-		let res = cache.query('rel-(room:item):roleTime!(user:asdf)', [ 3, 7 ]);
+		let res = cache.query('rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)', [ 3, 7 ]);
 		assert.deepEqual(res, new OrderedArray(
 			['rel', 'roleTime'],
 			[{
-				rel: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4 },
+				rel: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
 				room: { id: 'aa', type: 'room' }
 			}, {
-				rel: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7 },
+				rel: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
 				room: { id: 'bb', type: 'room' }
 			}]
 		));
@@ -111,25 +111,25 @@ describe('link', () => {
 	it('push', () => {
 		cache.put({
 			entities: {
-				dd_asdf: { id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9 }
+				dd_asdf: { id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9, roles: [41, 3] }
 			}
 		});
 
 		assert.deepEqual(cache.indexes, {
-			'rel-(room:item):roleTime!(user:asdf)': new OrderedArray(
+			'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new OrderedArray(
 				[ 'roleTime' ],
 				[
-					{ id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4 },
-					{ id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7 },
-					{ id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8 },
-					{ id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9 }
+					{ id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
+					{ id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
+					{ id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] },
+					{ id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9, roles: [41, 3] }
 				]
 			),
-			'rel-(room:item)/item!(user:asdf)': {
-				aa: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4 },
-				bb: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7 },
-				cc: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8 },
-				dd: { id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9 }
+			'rel-(room:item)/item!(roles~Scts:(+3),user:asdf)': {
+				aa: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
+				bb: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
+				cc: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] },
+				dd: { id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9, roles: [41, 3] }
 			}
 		});
 	});
@@ -137,18 +137,18 @@ describe('link', () => {
 	it('watch with partial gap', (done) => {
 		let flag = false,
 			res = cache.watch(
-			'rel-(room:item):roleTime!(user:asdf)',
+			'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)',
 			[ 6, 9 ],
 			function (res) {
 				if (!flag) {
 					assert.deepEqual(res, new OrderedArray(
 						[ 'rel', 'roleTime' ],
 						[
-							{ rel: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7 },
+							{ rel: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
 							room: { id: 'bb', type: 'room' } },
-							{ rel: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8 },
+							{ rel: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] },
 							room: { id: 'cc', type: 'room' } },
-							{ rel: { id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9 },
+							{ rel: { id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9, roles: [41, 3] },
 							room: { type: 'loading' } }
 						]
 					));
@@ -157,15 +157,16 @@ describe('link', () => {
 					assert.deepEqual(res, new OrderedArray(
 						[ 'rel', 'roleTime' ],
 						[
-							{ rel: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7 },
+							{ rel: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
 							room: { id: 'bb', type: 'room' } },
-							{ rel: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8 },
+							{ rel: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] },
 							room: { id: 'cc', type: 'room' } },
-							{ rel: { id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9 },
+							{ rel: { id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9, roles: [41, 3] },
 							room: { id: 'dd', type: 'room' } }
 						]
 					));
 					done();
+					res();
 				}
 			}
 		);
@@ -176,7 +177,29 @@ describe('link', () => {
 		}, 10);
 	});
 
+	it('splice', () => {
+		cache.put({
+			entities: {
+				dd_asdf: { id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9, roles: [] }
+			}
+		});
 
+		assert.deepEqual(cache.indexes, {
+			'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new OrderedArray(
+				[ 'roleTime' ],
+				[
+					{ id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
+					{ id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
+					{ id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] }
+				]
+			),
+			'rel-(room:item)/item!(roles~Scts:(+3),user:asdf)': {
+				aa: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
+				bb: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
+				cc: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] }
+			}
+		});
+	});
 });
 
 describe('join', () => {
