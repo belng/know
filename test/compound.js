@@ -136,7 +136,7 @@ describe('link', () => {
 
 	it('watch with partial gap', (done) => {
 		let flag = false,
-			res = cache.watch(
+			unwatch = cache.watch(
 			'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)',
 			[ 6, 9 ],
 			function (res) {
@@ -166,7 +166,7 @@ describe('link', () => {
 						]
 					));
 					done();
-					res();
+					unwatch();
 				}
 			}
 		);

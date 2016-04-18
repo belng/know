@@ -7,7 +7,7 @@ require('babel-core/register')({sourceMaps: 'inline'});
 let Cache = require('../lib/Cache'),
 	assert = require('assert');
 
-it('Should trigger a prune due to getEntities', () => {
+it.skip('Should trigger a prune due to getEntities', () => {
 	let cache = new Cache({
 		maxEntities: 10
 	});
