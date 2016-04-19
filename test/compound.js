@@ -177,7 +177,7 @@ describe('link', () => {
 		}, 10);
 	});
 
-	it('splice', () => {
+	it('remove', () => {
 		cache.put({
 			entities: {
 				dd_asdf: { id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9, roles: [] }
@@ -197,6 +197,37 @@ describe('link', () => {
 				aa: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
 				bb: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
 				cc: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] }
+			}
+		});
+	});
+
+	it('entity and rel put:', () => {
+		cache.put({
+			entities: {
+				dd: {id: 'dd', type: 'room'},
+				ee: {id: 'ee', type: 'room'},
+				dd_asdf: { id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9, roles: [41, 3] },
+				ee_asdf: { id: 'ee_asdf', type: 'rel', item: 'ee', user: 'asdf', roleTime: 10, roles: [41, 3] }
+			}
+		});
+
+		assert.deepEqual(cache.indexes, {
+			'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new OrderedArray(
+				[ 'roleTime' ],
+				[
+					{ id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
+					{ id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
+					{ id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] },
+					{ id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9, roles: [41, 3] },
+					{ id: 'ee_asdf', type: 'rel', item: 'ee', user: 'asdf', roleTime: 10, roles: [41, 3] }
+				]
+			),
+			'rel-(room:item)/item!(roles~Scts:(+3),user:asdf)': {
+				aa: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
+				bb: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
+				cc: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] },
+				dd: { id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9, roles: [41, 3] },
+				ee: { id: 'ee_asdf', type: 'rel', item: 'ee', user: 'asdf', roleTime: 10, roles: [41, 3] }
 			}
 		});
 	});
