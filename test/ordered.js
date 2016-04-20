@@ -6,8 +6,6 @@
 	assert = require('assert'),
 	arr;
 
-console.log(RangeArray);
-
 beforeEach(() => {
 	arr = new OrderedArray([ 'score' ], [
 		{ id: 22, score: 2 },

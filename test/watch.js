@@ -65,7 +65,7 @@ it('should fire onchange when one entity in list changes', (done) => {
 	}, 10);
 });
 
-it.only('should fire watch with correct number of results', (done) => {
+it('should fire watch with correct number of results', (done) => {
 	const cache = new Cache({
 		is: () => true,
 		id: entity => entity.id,
@@ -90,7 +90,6 @@ it.only('should fire watch with correct number of results', (done) => {
 		},
 		order: 'createTime',
 	}, [ Infinity, 20, 0 ], results => {
-		console.log('Results:', results);
 		if (i === 0) {
 			assert.equal(results.arr.length, 1, 'doesnt have item loading ');
 			assert.equal(results.arr[0].type, 'loading', 'type is not loading');
