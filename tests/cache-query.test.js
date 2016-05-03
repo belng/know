@@ -1,19 +1,16 @@
-/* eslint-env mocha */
-/* eslint no-console:0 */
-'use strict';
+import test from 'ava';
+import Cache from '../lib/Cache';
 
-require('babel-core/register')({sourceMaps: 'inline'});
+const {
+	RangeArray,
+	OrderedArray,
+} = Cache;
 
-let Cache = require('../lib/Cache').default,
-	RangeArray = Cache.RangeArray,
-	OrderedArray = Cache.OrderedArray,
-	assert = require('assert');
-
-it('-Infinity queries should be clamped', () => {
+test('-Infinity queries should be clamped', t => {
 	let cache = new Cache();
 
 	cache.onChange(change => {
-		assert.deepEqual(change.queries['text:createTime'],
+		t.deepEqual(change.queries['text:createTime'],
 			new RangeArray([ [ -Infinity, 0, 10 ] ])
 		);
 	});
@@ -21,11 +18,11 @@ it('-Infinity queries should be clamped', () => {
 	cache.query('text:createTime', [ -Infinity, 10, 10 ]);
 });
 
-it('+Infinity queries should be clamped', () => {
+test('+Infinity queries should be clamped', t => {
 	let cache = new Cache();
 
 	cache.onChange(change => {
-		assert.deepEqual(change.queries['text:createTime'],
+		t.deepEqual(change.queries['text:createTime'],
 			new RangeArray([ [ Infinity, 10, 0 ] ])
 		);
 	});
@@ -33,27 +30,27 @@ it('+Infinity queries should be clamped', () => {
 	cache.query('text:createTime', [ Infinity, 10, 10 ]);
 });
 
-it('Empty results', (done) => {
+test.cb('Empty results', t => {
 	let cache = new Cache();
 
 	cache.onChange(change => {
 		if (change.queries) {
 			cache.put({
 				knowledge: { 'note:updateTime!(user:satya164)': new RangeArray(
-					[[-Infinity, +Infinity]]
+					[ [ -Infinity, +Infinity ] ]
 				) },
 				indexes: { 'note:updateTime!(user:satya164)': new OrderedArray(
-					['updateTime'],
+					[ 'updateTime' ],
 					[]
-				)}
+				) }
 			});
 		}
 	});
 
 	cache.query(
 		'note:updateTime!(user:satya164)',
-		[Infinity, 100, 0],
-		(err, results) => { assert.deepEqual(results.arr, []); done(); }
+		[ Infinity, 100, 0 ],
+		(err, results) => { t.deepEqual(results.arr, []); t.end(); }
 	);
 
 });

@@ -1,10 +1,8 @@
-/* eslint-env mocha */
+import test from 'ava';
+import ks from '../lib/keyslice';
 
-var ks = require('../lib/keyslice'),
-	assert = require('assert');
-
-it('should slice to key in', () => {
-	assert.equal(ks.sliceToKey({
+test('should slice to key in', t => {
+	t.is(ks.sliceToKey({
 		type: 'text',
 		join: { rel: 'item' },
 		filter: { thread: 't1', user: 'u1' },
@@ -13,8 +11,8 @@ it('should slice to key in', () => {
 });
 
 
-it('should slice to key out', () => {
-	assert.equal(ks.sliceToKey({
+test('should slice to key out', t => {
+	t.is(ks.sliceToKey({
 		type: 'text',
 		link: { rel: 'item' },
 		filter: { thread: 't1', user: 'u1' },
@@ -22,8 +20,8 @@ it('should slice to key out', () => {
 	}), 'text-(rel:item):createTime!(thread:t1,user:u1)');
 });
 
-it('should key to slice in', () => {
-	assert.deepEqual({
+test('should key to slice in', t => {
+	t.deepEqual({
 		type: 'text',
 		join: { rel: 'item' },
 		filter: { thread: 't1', user: 'u1' },
@@ -31,8 +29,8 @@ it('should key to slice in', () => {
 	}, ks.keyToSlice('text+(rel:item):createTime!(thread:t1,user:u1)'));
 });
 
-it('should key to slice in', () => {
-	assert.deepEqual({
+test('should key to slice in', t => {
+	t.deepEqual({
 		type: 'text',
 		link: { rel: 'item' },
 		filter: { thread: 't1', user: 'u1' },
@@ -41,7 +39,7 @@ it('should key to slice in', () => {
 });
 
 
-it('two way conversion should result in same object', () => {
+test('two way conversion should result in same object', t => {
 	var x = {
 		type: 'thread',
 		order: 'createtime',
@@ -49,7 +47,7 @@ it('two way conversion should result in same object', () => {
 			parentsCtd: [ 'abc' ]
 		}
 	};
-	assert.deepEqual(
+	t.deepEqual(
 		x, ks.keyToSlice(ks.sliceToKey(x))
 	);
 });

@@ -1,15 +1,12 @@
-/* eslint-env mocha */
-/* eslint no-console:0 */
-'use strict';
+import test from 'ava';
+import Cache from '../lib/Cache';
 
-require('babel-core/register')({sourceMaps: 'inline'});
+const {
+	RangeArray,
+	OrderedArray,
+} = Cache;
 
-let assert = require('assert'),
-	Cache = require('../lib/Cache').default,
-	RangeArray = Cache.RangeArray,
-	OrderedArray = Cache.OrderedArray;
-
-it('should fire onchange when one entity in list changes', (done) => {
+test.cb('should fire onchange when one entity in list changes', t => {
 	const cache = new Cache({});
 
 	cache.put({
@@ -47,7 +44,7 @@ it('should fire onchange when one entity in list changes', (done) => {
 		order: 'createTime',
 	}, [ -Infinity, +Infinity ], (data) => {
 		if (data.arr[3].body === 'some') {
-			done();
+			t.end();
 		}
 	});
 
@@ -65,7 +62,7 @@ it('should fire onchange when one entity in list changes', (done) => {
 	}, 10);
 });
 
-it('should fire watch with correct number of results', (done) => {
+test.cb('should fire watch with correct number of results', t => {
 	const cache = new Cache({
 		is: () => true,
 		id: entity => entity.id,
@@ -91,18 +88,18 @@ it('should fire watch with correct number of results', (done) => {
 		order: 'createTime',
 	}, [ Infinity, 20, 0 ], results => {
 		if (i === 0) {
-			assert.equal(results.arr.length, 1, 'doesnt have item loading ');
-			assert.equal(results.arr[0].type, 'loading', 'type is not loading');
+			t.is(results.arr.length, 1, 'doesnt have item loading ');
+			t.is(results.arr[0].type, 'loading', 'type is not loading');
 		}
 
 		if (i === 1) {
-			assert.equal(results.arr.length, 1);
-			assert.equal(results.arr[0].type, 2);
+			t.is(results.arr.length, 1);
+			t.is(results.arr[0].type, 2);
 		}
 
 		if (i === 2) {
-			assert.equal(results.arr.length, 2);
-			done();
+			t.is(results.arr.length, 2);
+			t.end();
 		}
 
 		i++;
