@@ -8,3 +8,5 @@ cache:
 node_js:
   - 'stable'
   - '5'
+before_script:
+  - npm run build
