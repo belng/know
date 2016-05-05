@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/scrollback/know#readme",
   "dependencies": {
-    "jsonop": "^2.1.2",
+    "jsonop": "^3.0.1",
     "juri": "^1.0.2",
     "setimmediate": "^1.0.4"
   },
