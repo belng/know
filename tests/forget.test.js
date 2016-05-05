@@ -23,16 +23,12 @@ test('Forget a range', t => {
 		}
 	});
 
-	console.log("----------------------------------------");
-	console.log("last change");
-	console.log("----------------------------------------");
 	cache.put({
 		'-knowledge': {
 			'relation:roleTime!(:)': new RangeArray([ [ 1000000, +Infinity ] ])
 		}
 	});
 
-	console.log(cache.knowledge['relation:roleTime!(:)']);
 	t.deepEqual(
 		cache.knowledge['relation:roleTime!(:)'],
 		new RangeArray([ [ 0, 1000000 ] ])
