@@ -1,10 +1,6 @@
 import test from 'ava';
 import Cache from '../lib/Cache';
 
-const {
-	OrderedArray,
-} = Cache;
-
 test.beforeEach(t => {
 	t.context.cache = new Cache();
 });
@@ -33,16 +29,14 @@ test.cb('checking if callback of getEntity is fired if entity doesnt exist', t =
 			cache.put({ entities: { alice: null } });
 		}
 	});
-
 	t.deepEqual(
 		cache.getEntity('alice', (err, entity) => {
-			t.truthy(!err, 'threw an error');
-			t.truthy(!entity, 'entity doesnt exist');
+			t.true(!err, 'threw an error');
+			t.true(!entity, 'entity doesnt exist');
 			t.end();
 		}),
 		{ type: 'loading' }
 	);
-
 	t.deepEqual(cache.queries, { entities: { alice: true } });
 });
 
