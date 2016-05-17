@@ -6,7 +6,7 @@ const {
 	OrderedArray,
 } = Cache;
 
-test.skip('should fire onchange when one entity in list changes with no change to order property', t => {
+test.cb('should fire onchange when one entity in list changes with no change to order property', t => {
 	const cache = new Cache({});
 
 	cache.put({
@@ -43,7 +43,6 @@ test.skip('should fire onchange when one entity in list changes with no change t
 		type: 'text',
 		order: 'createTime',
 	}, [ -Infinity, +Infinity ], (data) => {
-		console.log("Watch fired: ", data);
 		if (count === 0) {
 			t.deepEqual(data, new OrderedArray([ 'createTime' ], [
 				{
@@ -57,8 +56,7 @@ test.skip('should fire onchange when one entity in list changes with no change t
 				{ createTime: 3, type: 'text', body: 'go', id: 'c' },
 				{ type: 'loading', start: 3, end: Infinity, createTime: Infinity } ]
 			 ));
-			 console.log('Done with first test');
-			 count ++;
+			 count++;
 		} else if (count === 1) {
 			t.deepEqual(data, new OrderedArray([ 'createTime' ], [
 				{
@@ -72,7 +70,6 @@ test.skip('should fire onchange when one entity in list changes with no change t
 				{ createTime: 3, type: 'text', body: 'some', id: 'c' },
 				{ type: 'loading', start: 3, end: Infinity, createTime: Infinity } ]
 			 ));
-			 console.log('Done with second test');
 			t.end();
 		}
 		// if (data.arr[3].body === 'some') {
@@ -82,7 +79,6 @@ test.skip('should fire onchange when one entity in list changes with no change t
 
 
 	setTimeout(() => {
-		console.log("put fired");
 		cache.put({
 			entities: {
 				c: {
@@ -96,7 +92,7 @@ test.skip('should fire onchange when one entity in list changes with no change t
 	}, 1000);
 });
 
-test.skip('should fire watch with correct number of results', t => {
+test.cb('should fire watch with correct number of results', t => {
 	const cache = new Cache({
 		is: () => true,
 		id: entity => entity.id,
@@ -124,19 +120,17 @@ test.skip('should fire watch with correct number of results', t => {
 		if (i === 0) {
 			t.is(results.arr.length, 1, 'doesnt have item loading ');
 			t.is(results.arr[0].type, 'loading', 'type is not loading');
-		}
-
-		if (i === 1) {
+			i++;
+		} else if (i === 1) {
 			t.is(results.arr.length, 1);
 			t.is(results.arr[0].type, 2);
-		}
+			i++;
 
-		if (i === 2) {
+		} else if (i === 2) {
 			t.is(results.arr.length, 2);
+			i++;
 			t.end();
 		}
-
-		i++;
 	});
 
 	setTimeout(() =>
@@ -215,7 +209,6 @@ test.cb('should fire watch: on order property change in middle of list', t => {
 		type: 'text',
 		order: 'createTime',
 	}, [ -Infinity, +Infinity ], (data) => {
-		console.log("Watch fired: ", data);
 		if (count === 0) {
 			t.deepEqual(data, new OrderedArray([ 'createTime' ], [
 				{
@@ -229,10 +222,8 @@ test.cb('should fire watch: on order property change in middle of list', t => {
 				{ createTime: 4, type: 'text', body: 'go', id: 'c' },
 				{ type: 'loading', start: 4, end: Infinity, createTime: Infinity } ]
 			 ));
-			 console.log('Done with first test');
-			 count ++;
+			 count++;
 		} else if (count === 1) {
-			console.log("second test: ");
 			t.deepEqual(data, new OrderedArray([ 'createTime' ], [
 				{
 					type: 'loading',
@@ -245,7 +236,6 @@ test.cb('should fire watch: on order property change in middle of list', t => {
 				{ createTime: 4, type: 'text', body: 'go', id: 'c' },
 				{ type: 'loading', start: 4, end: Infinity, createTime: Infinity } ]
 			 ));
-			 console.log('Done with second test');
 			t.end();
 		}
 		// if (data.arr[3].body === 'some') {
@@ -255,7 +245,6 @@ test.cb('should fire watch: on order property change in middle of list', t => {
 
 
 	setTimeout(() => {
-		console.log("put fired for id b");
 		cache.put({
 			entities: {
 				b: {
@@ -274,7 +263,7 @@ test.cb('should fire watch: on order property change in end of list', t => {
 
 	cache.put({
 		knowledge: {
-			'text:createTime': new RangeArray([ [ 1, 3 ] ])
+			'text:createTime': new RangeArray([ [ 1, Infinity ] ])
 		},
 		indexes: {
 			'text:createTime': new OrderedArray(
@@ -306,7 +295,6 @@ test.cb('should fire watch: on order property change in end of list', t => {
 		type: 'text',
 		order: 'createTime',
 	}, [ -Infinity, +Infinity ], (data) => {
-		console.log("Watch fired: ", data);
 		if (count === 0) {
 			t.deepEqual(data, new OrderedArray([ 'createTime' ], [
 				{
@@ -317,13 +305,10 @@ test.cb('should fire watch: on order property change in end of list', t => {
 				},
 				{ createTime: 1, type: 'text', body: 'hey', id: 'a' },
 				{ createTime: 2, type: 'text', body: 'ho', id: 'b' },
-				{ createTime: 3, type: 'text', body: 'go', id: 'c' },
-				{ type: 'loading', start: 3, end: Infinity, createTime: Infinity } ]
+				{ createTime: 3, type: 'text', body: 'go', id: 'c' } ]
 			 ));
-			 console.log('Done with first test');
-			 count ++;
+			 count++;
 		} else if (count === 1) {
-			console.log("second test: ");
 			t.deepEqual(data, new OrderedArray([ 'createTime' ], [
 				{
 					type: 'loading',
@@ -333,10 +318,8 @@ test.cb('should fire watch: on order property change in end of list', t => {
 				},
 				{ createTime: 1, type: 'text', body: 'hey', id: 'a' },
 				{ createTime: 2, type: 'text', body: 'ho', id: 'b' },
-				{ createTime: 4, type: 'text', body: 'some', id: 'c' },
-				{ type: 'loading', start: 4, end: Infinity, createTime: Infinity } ]
+				{ createTime: 4, type: 'text', body: 'some', id: 'c' } ]
 			 ));
-			 console.log('Done with second test');
 			t.end();
 		}
 		// if (data.arr[3].body === 'some') {
@@ -346,7 +329,6 @@ test.cb('should fire watch: on order property change in end of list', t => {
 
 
 	setTimeout(() => {
-		console.log("put fired for id b");
 		cache.put({
 			entities: {
 				c: {
