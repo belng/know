@@ -31,8 +31,8 @@ test.cb('checking if callback of getEntity is fired if entity doesnt exist', t =
 	});
 	t.deepEqual(
 		cache.getEntity('alice', (err, entity) => {
-			t.true(!err, 'threw an error');
-			t.true(!entity, 'entity doesnt exist');
+			t.falsy(err, 'threw an error');
+			t.falsy(entity, 'entity doesnt exist');
 			t.end();
 		}),
 		{ type: 'loading' }
