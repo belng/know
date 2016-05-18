@@ -6,7 +6,7 @@ const {
 	OrderedArray,
 } = Cache;
 
-test.cb('should fire onchange when one entity in list changes', t => {
+test.cb('should fire onchange when one entity in list changes with no change to order property', t => {
 	const cache = new Cache({});
 
 	cache.put({
@@ -38,15 +38,45 @@ test.cb('should fire onchange when one entity in list changes', t => {
 			)
 		}
 	});
-
+	let count = 0;
 	cache.watch({
 		type: 'text',
 		order: 'createTime',
 	}, [ -Infinity, +Infinity ], (data) => {
-		if (data.arr[3].body === 'some') {
+		if (count === 0) {
+			t.deepEqual(data, new OrderedArray([ 'createTime' ], [
+				{
+					type: 'loading',
+					start: -Infinity,
+					end: 1,
+					createTime: -Infinity
+				},
+				{ createTime: 1, type: 'text', body: 'hey', id: 'a' },
+				{ createTime: 2, type: 'text', body: 'ho', id: 'b' },
+				{ createTime: 3, type: 'text', body: 'go', id: 'c' },
+				{ type: 'loading', start: 3, end: Infinity, createTime: Infinity } ]
+			 ));
+			 count++;
+		} else if (count === 1) {
+			t.deepEqual(data, new OrderedArray([ 'createTime' ], [
+				{
+					type: 'loading',
+					start: -Infinity,
+					end: 1,
+					createTime: -Infinity
+				},
+				{ createTime: 1, type: 'text', body: 'hey', id: 'a' },
+				{ createTime: 2, type: 'text', body: 'ho', id: 'b' },
+				{ createTime: 3, type: 'text', body: 'some', id: 'c' },
+				{ type: 'loading', start: 3, end: Infinity, createTime: Infinity } ]
+			 ));
 			t.end();
 		}
+		// if (data.arr[3].body === 'some') {
+		// 	t.end();
+		// }
 	});
+
 
 	setTimeout(() => {
 		cache.put({
@@ -59,7 +89,7 @@ test.cb('should fire onchange when one entity in list changes', t => {
 				}
 			}
 		});
-	}, 10);
+	}, 1000);
 });
 
 test.cb('should fire watch with correct number of results', t => {
@@ -90,19 +120,17 @@ test.cb('should fire watch with correct number of results', t => {
 		if (i === 0) {
 			t.is(results.arr.length, 1, 'doesnt have item loading ');
 			t.is(results.arr[0].type, 'loading', 'type is not loading');
-		}
-
-		if (i === 1) {
+			i++;
+		} else if (i === 1) {
 			t.is(results.arr.length, 1);
 			t.is(results.arr[0].type, 2);
-		}
+			i++;
 
-		if (i === 2) {
+		} else if (i === 2) {
 			t.is(results.arr.length, 2);
+			i++;
 			t.end();
 		}
-
-		i++;
 	});
 
 	setTimeout(() =>
@@ -142,4 +170,174 @@ test.cb('should fire watch with correct number of results', t => {
 				}
 			}
 		}), 300);
+});
+
+test.cb('should fire watch: on order property change in middle of list', t => {
+	const cache = new Cache({});
+
+	cache.put({
+		knowledge: {
+			'text:createTime': new RangeArray([ [ 1, 4 ] ])
+		},
+		indexes: {
+			'text:createTime': new OrderedArray(
+				[ 'createTime' ], [
+					{
+						createTime: 1,
+						type: 'text',
+						body: 'hey',
+						id: 'a'
+					},
+					{
+						createTime: 2,
+						type: 'text',
+						body: 'ho',
+						id: 'b'
+					},
+					{
+						createTime: 4,
+						type: 'text',
+						body: 'go',
+						id: 'c'
+					}
+				]
+			)
+		}
+	});
+	let count = 0;
+	cache.watch({
+		type: 'text',
+		order: 'createTime',
+	}, [ -Infinity, +Infinity ], (data) => {
+		if (count === 0) {
+			t.deepEqual(data, new OrderedArray([ 'createTime' ], [
+				{
+					type: 'loading',
+					start: -Infinity,
+					end: 1,
+					createTime: -Infinity
+				},
+				{ createTime: 1, type: 'text', body: 'hey', id: 'a' },
+				{ createTime: 2, type: 'text', body: 'ho', id: 'b' },
+				{ createTime: 4, type: 'text', body: 'go', id: 'c' },
+				{ type: 'loading', start: 4, end: Infinity, createTime: Infinity } ]
+			 ));
+			 count++;
+		} else if (count === 1) {
+			t.deepEqual(data, new OrderedArray([ 'createTime' ], [
+				{
+					type: 'loading',
+					start: -Infinity,
+					end: 1,
+					createTime: -Infinity
+				},
+				{ createTime: 1, type: 'text', body: 'hey', id: 'a' },
+				{ createTime: 3, type: 'text', body: 'some', id: 'b' },
+				{ createTime: 4, type: 'text', body: 'go', id: 'c' },
+				{ type: 'loading', start: 4, end: Infinity, createTime: Infinity } ]
+			 ));
+			t.end();
+		}
+		// if (data.arr[3].body === 'some') {
+		// 	t.end();
+		// }
+	});
+
+
+	setTimeout(() => {
+		cache.put({
+			entities: {
+				b: {
+					createTime: 3,
+					type: 'text',
+					body: 'some',
+					id: 'b'
+				}
+			}
+		});
+	}, 1000);
+});
+
+test.cb('should fire watch: on order property change in end of list', t => {
+	const cache = new Cache({});
+
+	cache.put({
+		knowledge: {
+			'text:createTime': new RangeArray([ [ 1, Infinity ] ])
+		},
+		indexes: {
+			'text:createTime': new OrderedArray(
+				[ 'createTime' ], [
+					{
+						createTime: 1,
+						type: 'text',
+						body: 'hey',
+						id: 'a'
+					},
+					{
+						createTime: 2,
+						type: 'text',
+						body: 'ho',
+						id: 'b'
+					},
+					{
+						createTime: 3,
+						type: 'text',
+						body: 'go',
+						id: 'c'
+					}
+				]
+			)
+		}
+	});
+	let count = 0;
+	cache.watch({
+		type: 'text',
+		order: 'createTime',
+	}, [ -Infinity, +Infinity ], (data) => {
+		if (count === 0) {
+			t.deepEqual(data, new OrderedArray([ 'createTime' ], [
+				{
+					type: 'loading',
+					start: -Infinity,
+					end: 1,
+					createTime: -Infinity
+				},
+				{ createTime: 1, type: 'text', body: 'hey', id: 'a' },
+				{ createTime: 2, type: 'text', body: 'ho', id: 'b' },
+				{ createTime: 3, type: 'text', body: 'go', id: 'c' } ]
+			 ));
+			 count++;
+		} else if (count === 1) {
+			t.deepEqual(data, new OrderedArray([ 'createTime' ], [
+				{
+					type: 'loading',
+					start: -Infinity,
+					end: 1,
+					createTime: -Infinity
+				},
+				{ createTime: 1, type: 'text', body: 'hey', id: 'a' },
+				{ createTime: 2, type: 'text', body: 'ho', id: 'b' },
+				{ createTime: 4, type: 'text', body: 'some', id: 'c' } ]
+			 ));
+			t.end();
+		}
+		// if (data.arr[3].body === 'some') {
+		// 	t.end();
+		// }
+	});
+
+
+	setTimeout(() => {
+		cache.put({
+			entities: {
+				c: {
+					createTime: 4,
+					type: 'text',
+					body: 'some',
+					id: 'c'
+				}
+			}
+		});
+	}, 1000);
 });

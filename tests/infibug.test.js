@@ -1,13 +1,8 @@
 import test from 'ava';
 import Cache from '../lib/Cache';
 
-const {
-	RangeArray,
-	OrderedArray,
-} = Cache;
-
 test.cb('infinite ranges should not be queried unnecessarily', t => {
-	let cache = new Cache();
+	const cache = new Cache();
 
 	cache.put({
 		knowledge: { 'asdf:xyz!(:)': [ [ 12345, Infinity ] ] },
@@ -15,11 +10,13 @@ test.cb('infinite ranges should not be queried unnecessarily', t => {
 	});
 
 	cache.onChange((changes) => {
-		t.deepEqual(
-			changes.queries['asdf:xyz!(:)'].arr,
-			[ [ 12345, 20, 0 ] ]
-		);
-		t.end();
+		if (changes.queries && changes.queries['asdf:xyz!(:)']) {
+			t.deepEqual(
+				changes.queries['asdf:xyz!(:)'].arr,
+				[ [ 12345, 20, 0 ] ]
+			);
+			t.end();
+		}
 	});
 
 	cache.query('asdf:xyz!(:)', [ 12345, 20, 0 ], () => {});
@@ -27,7 +24,7 @@ test.cb('infinite ranges should not be queried unnecessarily', t => {
 
 
 test('should avoid duplicates', t => {
-	let cache = new Cache();
+	const cache = new Cache();
 
 	cache.put({
 		knowledge: { 'asdf:xyz!(:)': [ [ 10, Infinity ] ] },
