@@ -43,7 +43,6 @@ test('should avoid duplicates', t => {
 		] }
 	});
 
-	console.log(cache.indexes.arr);
 	t.deepEqual(cache.indexes['asdf:xyz!(:)'].arr, [
 		{ id: 5, type: 'asdf', xyz: 5 },
 		{ id: 4, type: 'asdf', xyz: 7 },
