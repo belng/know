@@ -30,13 +30,13 @@ test.cb('should aggregate change and fire onchange one', t => {
 
 	cache.onChange(changes => {
 		count++;
-
 		if (count === 1) {
 			t.deepEqual(changes, {
 				entities: {
 					foo: { id: 'foo', type: 'boo' },
 					bar: { id: 'bar', type: 'boo' }
-				}
+				},
+				source: 'server'
 			});
 			t.end();
 		}
@@ -47,27 +47,17 @@ test.cb('should aggregate change and fire onchange one', t => {
 	});
 
 	cache.put({ entities: { foo: { id: 'foo', type: 'boo' } }, source: 'server' });
-	cache.put({ entities: { bar: { id: 'bar', type: 'boo' } } });
+	cache.put({ entities: { bar: { id: 'bar', type: 'boo' } }, source: 'server' });
 });
 
 
-test.cb('should aggregate change and fire onchange once', t => {
+test.cb('should not aggregate change and fire onchange twice', t => {
 	let cache = new Cache({}), count = 0;
 
-	cache.onChange(changes => {
+	cache.onChange(() => {
 		count++;
 
 		if (count === 2) {
-			throw new Error("Onchange fired multiple times");
-		}
-
-		if (count === 1) {
-			t.deepEqual(changes, {
-				entities: {
-					foo: { id: 'foo', type: 'boo' },
-					bar: { id: 'bar', type: 'boo' }
-				}
-			});
 			t.end();
 		}
 
@@ -89,7 +79,8 @@ test.cb('should fire onchange twice', t => {
 			t.deepEqual(changes, {
 				entities: {
 					foo: { id: 'foo', type: 'boo' }
-				}
+				},
+				source: 'server'
 			});
 		}
 
