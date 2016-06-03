@@ -159,7 +159,7 @@ test.skip('new primary item', t => {
 
 	cache.put({
 		entities: {
-			me_item5: { id: 'item4', type: 'item', score: 1 }
+			item5: { id: 'item4', type: 'item', score: 1 }
 		}
 	});
 
@@ -171,6 +171,36 @@ test.skip('new primary item', t => {
 			rel: { id: 'me_item2', type: 'rel', role: 2, item: 'item2' } },
 		  { item: { id: 'item5', type: 'item', score: 1 },
 			rel: null }
+		]
+	);
+});
+
+test.skip('update primary item', t => {
+	const cache = new Cache(); //eslint-disable-line
+	const key = 'item+(rel:item):score';
+	cache.put({
+		knowledge: { [key]: [ [ -Infinity, Infinity ] ] },
+		indexes: { [key]: [
+			{ item: { id: 'item1', type: 'item', score: 1 }, rel: { id: 'me_item1', type: 'rel', role: 1, item: 'item1' } },
+			{ item: { id: 'item2', type: 'item', score: 1 }, rel: { id: 'me_item2', type: 'rel', role: 1, item: 'item2' } },
+			{ item: { id: 'item3', type: 'item', score: 1 }, rel: { id: 'me_item3', type: 'rel', role: 1, item: 'item3' } },
+		] }
+	});
+
+	cache.put({
+		entities: {
+			item2: { id: 'item2', type: 'item', score: 10 }
+		}
+	});
+
+	t.deepEqual(
+		cache.query(key, [ -Infinity, Infinity ]).arr,
+		[ { item: { id: 'item1', type: 'item', score: 1 },
+			rel: { id: 'me_item1', type: 'rel', role: 1, item: 'item1' } },
+		  { item: { id: 'item2', type: 'item', score: 10 },
+			rel: { id: 'me_item2', type: 'rel', role: 2, item: 'item2' } },
+		  { item: { id: 'item3', type: 'item', score: 1 },
+			rel: { id: 'me_item3', type: 'rel', role: 2, item: 'item3' } },
 		]
 	);
 });
