@@ -163,8 +163,6 @@ test.only('new primary item', t => {
 		}
 	});
 
-	console.log(cache.queries);
-
 	t.deepEqual(
 		cache.query(key, [ -Infinity, Infinity ]).arr,
 		[ { item: { id: 'item1', type: 'item', score: 1 },
