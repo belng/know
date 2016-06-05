@@ -1,5 +1,5 @@
 import test from 'ava';
-import ks from '../lib/keyslice';
+import * as ks from '../lib/keyslice';
 
 test('should slice to key in', t => {
 	t.is(ks.sliceToKey({

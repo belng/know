@@ -7,13 +7,15 @@ const {
 } = Cache;
 
 const cache = new Cache();
+const key = 'rel-(room:item):roleTime!(rel:(roles~Scts:(+3),user:asdf))',
+	dKey = 'rel-(room:item)/item!(rel:(roles~Scts:(+3),user:asdf))';
 
 test.serial('first put', t => {
 	cache.put({
-		knowledge: { 'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new RangeArray(
-			[[-Infinity, 5]]
-		)},
-		indexes: { 'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new OrderedArray(
+		knowledge: { [key]: new RangeArray(
+			[ [ -Infinity, 5 ] ]
+		) },
+		indexes: { [key]: new OrderedArray(
 			['rel', 'roleTime'],
 			[{
 				rel: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
@@ -28,13 +30,13 @@ test.serial('first put', t => {
 		aa: { id: 'aa', type: 'room' }
 	});
 	t.deepEqual(cache.indexes, {
-		'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new OrderedArray(
+		[key]: new OrderedArray(
 			[ 'roleTime' ],
 			[{
 				id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf',roleTime: 4, roles: [41, 3]
 			}]
 		),
-		'rel-(room:item)/item!(roles~Scts:(+3),user:asdf)': {
+		[dKey]: {
 			aa: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf',roleTime: 4, roles: [41, 3] }
 		}
 	});
@@ -42,10 +44,10 @@ test.serial('first put', t => {
 
 test.serial('second put', t => {
 	cache.put({
-		knowledge: { 'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new RangeArray(
+		knowledge: { [key]: new RangeArray(
 			[[5, Infinity]]
 		)},
-		indexes: { 'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new OrderedArray(
+		indexes: { [key]: new OrderedArray(
 			[ 'rel', 'roleTime' ],
 			[ {
 				rel: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf',roleTime: 7, roles: [41, 3] },
@@ -71,7 +73,7 @@ test.serial('second put', t => {
 		cc: { id: 'cc', type: 'room' }
 	});
 	t.deepEqual(cache.indexes, {
-		'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new OrderedArray(
+		[key]: new OrderedArray(
 			[ 'roleTime' ],
 			[ {
 				id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3]
@@ -81,7 +83,7 @@ test.serial('second put', t => {
 				id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3]
 			} ]
 		),
-		'rel-(room:item)/item!(roles~Scts:(+3),user:asdf)': {
+		[dKey]: {
 			aa: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
 			bb: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
 			cc: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] }
@@ -90,7 +92,7 @@ test.serial('second put', t => {
 });
 
 test.serial('query', t => {
-	let res = cache.query('rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)', [ 3, 7 ]);
+	let res = cache.query(key, [ 3, 7 ]);
 	t.deepEqual(res, new OrderedArray(
 		['rel', 'roleTime'],
 		[{
@@ -110,8 +112,10 @@ test.serial('push', t => {
 		}
 	});
 
+	// console.log(require('util').inspect(cache.indexes, {depth: Infinity}));
+
 	t.deepEqual(cache.indexes, {
-		'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new OrderedArray(
+		[key]: new OrderedArray(
 			[ 'roleTime' ],
 			[
 				{ id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
@@ -120,7 +124,7 @@ test.serial('push', t => {
 				{ id: 'dd_asdf', type: 'rel', item: 'dd', user: 'asdf', roleTime: 9, roles: [41, 3] }
 			]
 		),
-		'rel-(room:item)/item!(roles~Scts:(+3),user:asdf)': {
+		[dKey]: {
 			aa: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
 			bb: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
 			cc: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] },
@@ -131,10 +135,7 @@ test.serial('push', t => {
 
 test.serial.cb('watch with partial gap', t => {
 	let flag = false,
-		unwatch = cache.watch(
-		'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)',
-		[ 6, 9 ],
-		function (res) {
+		unwatch = cache.watch(key, [ 6, 9 ], function (res) {
 			if (!flag) {
 				t.deepEqual(res, new OrderedArray(
 					[ 'rel', 'roleTime' ],
@@ -165,6 +166,7 @@ test.serial.cb('watch with partial gap', t => {
 			}
 		}
 	);
+
 	t.deepEqual(cache.queries, { entities: { dd: true } });
 
 	setTimeout(() => {
@@ -180,7 +182,7 @@ test.serial('remove', t => {
 	});
 
 	t.deepEqual(cache.indexes, {
-		'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new OrderedArray(
+		[key]: new OrderedArray(
 			[ 'roleTime' ],
 			[
 				{ id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
@@ -188,7 +190,7 @@ test.serial('remove', t => {
 				{ id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] }
 			]
 		),
-		'rel-(room:item)/item!(roles~Scts:(+3),user:asdf)': {
+		[dKey]: {
 			aa: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
 			bb: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
 			cc: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] }
@@ -207,7 +209,7 @@ test.serial('entity and rel put:', t => {
 	});
 
 	t.deepEqual(cache.indexes, {
-		'rel-(room:item):roleTime!(roles~Scts:(+3),user:asdf)': new OrderedArray(
+		[key]: new OrderedArray(
 			[ 'roleTime' ],
 			[
 				{ id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
@@ -217,7 +219,7 @@ test.serial('entity and rel put:', t => {
 				{ id: 'ee_asdf', type: 'rel', item: 'ee', user: 'asdf', roleTime: 10, roles: [41, 3] }
 			]
 		),
-		'rel-(room:item)/item!(roles~Scts:(+3),user:asdf)': {
+		[dKey]: {
 			aa: { id: 'aa_asdf', type: 'rel', item: 'aa', user: 'asdf', roleTime: 4, roles: [41, 3] },
 			bb: { id: 'bb_asdf', type: 'rel', item: 'bb', user: 'asdf', roleTime: 7, roles: [41, 3] },
 			cc: { id: 'cc_asdf', type: 'rel', item: 'cc', user: 'asdf', roleTime: 8, roles: [41, 3] },

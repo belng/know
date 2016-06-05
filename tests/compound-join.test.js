@@ -6,14 +6,16 @@ const {
 	RangeArray,
 } = Cache;
 
-const cache = new Cache();
+const cache = new Cache(),
+	key = 'thread+(rel:item):createTime!(rel:(user:asdf))',
+	dKey = 'rel-(thread:item)/item!(rel:(user:asdf))';
 
 test.serial('first put', t => {
 	cache.put({
-		knowledge: { 'thread+(rel:item):createTime!(user:asdf)': new RangeArray(
+		knowledge: { [key]: new RangeArray(
 			[ [ -Infinity, 5 ] ]
 		) },
-		indexes: { 'thread+(rel:item):createTime!(user:asdf)': new OrderedArray(
+		indexes: { [key]: new OrderedArray(
 			[ 'thread', 'createTime' ],
 			[ {
 				rel: { id: 'aa_asdf', type: 'rel', item: 'aa' },
@@ -21,17 +23,18 @@ test.serial('first put', t => {
 			} ]
 		) }
 	});
+
 	t.deepEqual(cache.entities, {
 		aa_asdf: { id: 'aa_asdf', type: 'rel', item: 'aa' },
 		aa: { id: 'aa', type: 'thread', createTime: 3 }
 	});
 
 	t.deepEqual(cache.indexes, {
-		'thread+(rel:item):createTime!(user:asdf)': new OrderedArray(
+		[key]: new OrderedArray(
 			[ 'createTime' ],
 			[ { id: 'aa', type: 'thread', createTime: 3 } ]
 		),
-		'rel-(thread:item)/item!(user:asdf)': {
+		[dKey]: {
 			aa: { id: 'aa_asdf', type: 'rel', item: 'aa' }
 		}
 	});
@@ -39,10 +42,10 @@ test.serial('first put', t => {
 
 test.serial('second put', t => {
 	cache.put({
-		knowledge: { 'thread+(rel:item):createTime!(user:asdf)': new RangeArray(
+		knowledge: { [key]: new RangeArray(
 			[ [ 5, Infinity ] ]
 		) },
-		indexes: { 'thread+(rel:item):createTime!(user:asdf)': new OrderedArray(
+		indexes: { [key]: new OrderedArray(
 			[ 'thread', 'createTime' ],
 			[{
 				rel: { id: 'bb_asdf', type: 'rel', item: 'bb' },
@@ -64,7 +67,7 @@ test.serial('second put', t => {
 		cc: { id: 'cc', type: 'thread', createTime: 7 }
 	});
 	t.deepEqual(cache.indexes, {
-		'thread+(rel:item):createTime!(user:asdf)': new OrderedArray(
+		[key]: new OrderedArray(
 			[ 'createTime' ],
 			[
 				{ id: 'aa', type: 'thread', createTime: 3 },
@@ -72,7 +75,7 @@ test.serial('second put', t => {
 				{ id: 'cc', type: 'thread', createTime: 7 }
 			]
 		),
-		'rel-(thread:item)/item!(user:asdf)': {
+		[dKey]: {
 			aa: { id: 'aa_asdf', type: 'rel', item: 'aa' },
 			bb: { id: 'bb_asdf', type: 'rel', item: 'bb' },
 			cc: { id: 'cc_asdf', type: 'rel', item: 'cc' }
@@ -81,10 +84,7 @@ test.serial('second put', t => {
 });
 
 test.serial('query', t => {
-	let res = cache.query(
-		'thread+(rel:item):createTime!(user:asdf)',
-		[ 3, 7 ]
-	);
+	const res = cache.query(key, [ 3, 7 ]);
 	t.deepEqual(res, new OrderedArray(
 		[ 'thread', 'createTime' ],
 		[ {
@@ -146,7 +146,7 @@ test('push', t => {
 	);
 });
 
-test.only('new primary item', t => {
+test('new primary item', t => {
 	const cache = new Cache(); //eslint-disable-line
 	const key = 'item+(rel:item):score';
 	cache.put({
