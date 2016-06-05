@@ -146,44 +146,46 @@ test('push', t => {
 	);
 });
 
-test.skip('new primary item', t => {
+test.only('new primary item', t => {
 	const cache = new Cache(); //eslint-disable-line
 	const key = 'item+(rel:item):score';
 	cache.put({
 		knowledge: { [key]: [ [ -Infinity, Infinity ] ] },
 		indexes: { [key]: [
 			{ item: { id: 'item1', type: 'item', score: 1 }, rel: { id: 'me_item1', type: 'rel', role: 1, item: 'item1' } },
-			{ item: { id: 'item2', type: 'item', score: 1 }, rel: { id: 'me_item2', type: 'rel', role: 1, item: 'item2' } },
+			{ item: { id: 'item2', type: 'item', score: 2 }, rel: { id: 'me_item2', type: 'rel', role: 1, item: 'item2' } },
 		] }
 	});
 
 	cache.put({
 		entities: {
-			item5: { id: 'item4', type: 'item', score: 1 }
+			item4: { id: 'item4', type: 'item', score: 3 }
 		}
 	});
 
+	console.log(cache.queries);
+
 	t.deepEqual(
 		cache.query(key, [ -Infinity, Infinity ]).arr,
-		[ { item: { id: 'item4', type: 'item', score: 1 },
-			rel: { id: 'me_item4', type: 'rel', role: 1, item: 'item4' } },
-		  { item: { id: 'item2', type: 'item', score: 1 },
-			rel: { id: 'me_item2', type: 'rel', role: 2, item: 'item2' } },
-		  { item: { id: 'item5', type: 'item', score: 1 },
-			rel: null }
+		[ { item: { id: 'item1', type: 'item', score: 1 },
+			rel: { id: 'me_item1', type: 'rel', role: 1, item: 'item1' } },
+		  { item: { id: 'item2', type: 'item', score: 2 },
+			rel: { id: 'me_item2', type: 'rel', role: 1, item: 'item2' } },
+		  { item: { id: 'item4', type: 'item', score: 3 },
+			rel: { type: 'loading' } }
 		]
 	);
 });
 
-test.skip('update primary item', t => {
+test('update primary item', t => {
 	const cache = new Cache(); //eslint-disable-line
 	const key = 'item+(rel:item):score';
 	cache.put({
 		knowledge: { [key]: [ [ -Infinity, Infinity ] ] },
 		indexes: { [key]: [
 			{ item: { id: 'item1', type: 'item', score: 1 }, rel: { id: 'me_item1', type: 'rel', role: 1, item: 'item1' } },
-			{ item: { id: 'item2', type: 'item', score: 1 }, rel: { id: 'me_item2', type: 'rel', role: 1, item: 'item2' } },
-			{ item: { id: 'item3', type: 'item', score: 1 }, rel: { id: 'me_item3', type: 'rel', role: 1, item: 'item3' } },
+			{ item: { id: 'item2', type: 'item', score: 2 }, rel: { id: 'me_item2', type: 'rel', role: 1, item: 'item2' } },
+			{ item: { id: 'item3', type: 'item', score: 3 }, rel: { id: 'me_item3', type: 'rel', role: 1, item: 'item3' } },
 		] }
 	});
 
@@ -197,10 +199,10 @@ test.skip('update primary item', t => {
 		cache.query(key, [ -Infinity, Infinity ]).arr,
 		[ { item: { id: 'item1', type: 'item', score: 1 },
 			rel: { id: 'me_item1', type: 'rel', role: 1, item: 'item1' } },
+		  { item: { id: 'item3', type: 'item', score: 3 },
+			rel: { id: 'me_item3', type: 'rel', role: 1, item: 'item3' } },
 		  { item: { id: 'item2', type: 'item', score: 10 },
-			rel: { id: 'me_item2', type: 'rel', role: 2, item: 'item2' } },
-		  { item: { id: 'item3', type: 'item', score: 1 },
-			rel: { id: 'me_item3', type: 'rel', role: 2, item: 'item3' } },
+			rel: { id: 'me_item2', type: 'rel', role: 1, item: 'item2' } }
 		]
 	);
 });
