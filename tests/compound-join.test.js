@@ -204,3 +204,55 @@ test('update primary item', t => {
 		]
 	);
 });
+
+test('make queries for secondary items only when need', t => {
+	const c = new Cache();
+
+	const rKey = 'item+(rel:item):createTime';
+	// const dualKey = 'rel-(item:item)/item';
+
+	c.put({
+		knowledge: { [rKey]: [ [ 1, 5 ] ] },
+		indexes: { [rKey]: [ {
+			item: {
+				id: 'i1',
+				createTime: 1,
+				type: 'item'
+			},
+			rel: {
+				id: 'r1',
+				item: 'i1',
+				type: 'rel'
+			}
+		}, {
+			item: {
+				id: 'i2',
+				createTime: 2,
+				type: 'item'
+			}
+		}, {
+			item: {
+				id: 'i3',
+				createTime: 3,
+				type: 'item'
+			}
+		} ] }
+	});
+
+
+	let results = c.query(rKey, [ 1, 5 ]);
+
+	results = results.arr.filter(e => e.rel && e.rel.type === 'loading');
+	t.deepEqual(results.length, 0);
+	c.put({
+		entities: {
+			i4: {
+				createTime: 4,
+				id: 'i4',
+				type: 'item'
+			}
+		}
+	});
+
+	t.deepEqual(c.query(rKey , [ 1, 5 ]).arr.filter(e => e.rel && e.rel.type === 'loading').length, 1);
+});
