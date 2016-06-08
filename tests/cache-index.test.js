@@ -42,6 +42,27 @@ test('item should be deleted', t => {
 	t.truthy(res.get(0).id !== 'numix', 'didnt delete');
 });
 
+test('item should be deleted from index when filter is not valid', t => {
+	const cache = new Cache();
+	cache.put({
+		knowledge: { 'room:updateTime!(p:3)': [ [ 0, 7 ] ] },
+		indexes: { 'room:updateTime!(p:3)': [
+			{ id: 'numix', type: 'room', updateTime: 1, p: 3 },
+			{ id: 'scrollback', type: 'room', updateTime: 3, p: 3 },
+			{ id: 'bangalore', type: 'room', updateTime: 6, p: 3 }
+		] }
+	});
+
+	cache.put({
+		entities: {
+			numix: { id: 'numix', type: 'room', updateTime: 1, p: 4 }
+		}
+	});
+
+	const res = cache.query('room:updateTime!(p:3)', [ 1, 9 ]);
+	t.true(res.get(0).id !== 'numix', 'didnt delete');
+});
+
 test.cb("getEntity callback fired when indexes are put", t => {
 	let cache = new Cache();
 	cache.getEntity("test123", (err, entity) => {
