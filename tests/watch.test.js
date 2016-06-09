@@ -6,7 +6,7 @@ const {
 	OrderedArray,
 } = Cache;
 
-test.cb.failing('should fire onchange when one entity in list changes with no change to order property', t => {
+test.cb('should fire onchange when one entity in list changes with no change to order property', t => {
 	const cache = new Cache({});
 
 	cache.put({

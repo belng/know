@@ -1,9 +1,7 @@
 import test from 'ava';
 import Cache from '../lib/Cache';
+// import { checkFilters, keyToSlice } from '../lib/keyslice';
 
-const {
-	OrderedArray,
-} = Cache;
 
 test('adding knowledge should add the indexes', t => {
 	const cache = new Cache({
@@ -38,15 +36,15 @@ test('item should be deleted', t => {
 			numix: null
 		}
 	});
-	let res = cache.query('room:updateTime!(:)', [ 1, 9 ]);
+	const res = cache.query('room:updateTime!(:)', [ 1, 9 ]);
 	t.truthy(res.get(0).id !== 'numix', 'didnt delete');
 });
 
-test('item should be deleted from index when filter is not valid', t => {
+test('item that no longer satisfies filter should be removed from index', t => {
 	const cache = new Cache();
 	cache.put({
-		knowledge: { 'room:updateTime!(p:3)': [ [ 0, 7 ] ] },
-		indexes: { 'room:updateTime!(p:3)': [
+		knowledge: { 'room:updateTime!(p:+3)': [ [ 0, 7 ] ] },
+		indexes: { 'room:updateTime!(p:+3)': [
 			{ id: 'numix', type: 'room', updateTime: 1, p: 3 },
 			{ id: 'scrollback', type: 'room', updateTime: 3, p: 3 },
 			{ id: 'bangalore', type: 'room', updateTime: 6, p: 3 }
@@ -59,14 +57,35 @@ test('item should be deleted from index when filter is not valid', t => {
 		}
 	});
 
-	const res = cache.query('room:updateTime!(p:3)', [ 1, 9 ]);
+	const res = cache.query('room:updateTime!(p:+3)', [ 1, 9 ]);
 	t.true(res.get(0).id !== 'numix', 'didnt delete');
 });
 
-test.cb("getEntity callback fired when indexes are put", t => {
+test('array props no longer satisfies filter, item removal from index', t => {
+	const cache = new Cache();
+	cache.put({
+		knowledge: { 'room:updateTime!(p~Scts:(+3))': [ [ 0, 7 ] ] },
+		indexes: { 'room:updateTime!(p~Scts:(+3))': [
+			{ id: 'numix', type: 'room', updateTime: 1, p: [1, 3] },
+			{ id: 'scrollback', type: 'room', updateTime: 3, p: [3, 4] },
+			{ id: 'bangalore', type: 'room', updateTime: 6, p: [2, 3, 4] }
+		] }
+	});
+
+	cache.put({
+		entities: {
+			numix: { id: 'numix', type: 'room', updateTime: 1, p: [2, 4] }
+		}
+	});
+
+	const res = cache.query('room:updateTime!(p~Scts:(+3))', [ 1, 9 ]);
+	t.true(res.get(0).id !== 'numix', 'didnt delete');
+});
+
+test.cb('getEntity callback fired when indexes are put', t => {
 	let cache = new Cache();
-	cache.getEntity("test123", (err, entity) => {
-		t.deepEqual(entity, {id: 'test123', type: 'room', updateTime: 3});
+	cache.getEntity('test123', (err, entity) => {
+		t.deepEqual(entity, { id: 'test123', type: 'room', updateTime: 3 });
 		t.end();
 	});
 	cache.put({
