@@ -39,6 +39,7 @@ test.cb('should fire onchange when one entity in list changes with no change to 
 		}
 	});
 	let count = 0;
+
 	cache.watch({
 		type: 'text',
 		order: 'createTime',
@@ -48,7 +49,7 @@ test.cb('should fire onchange when one entity in list changes with no change to 
 				{
 					type: 'loading',
 					start: -Infinity,
-					end: 0, // This should be 1, it is inexplicably 0. Strangely, doing console.log() in the watch() dispatcher seems to flip it to 1! Possibly a transpiler bug.
+					end: 1, // This should be 1, it is inexplicably 0. Strangely, doing console.log() in the watch() dispatcher seems to flip it to 1! Possibly a transpiler bug.
 
 					createTime: -Infinity
 				},
