@@ -175,6 +175,8 @@ test('new primary item', t => {
 	);
 });
 
+
+
 test('update primary item', t => {
 	const cache = new Cache(); //eslint-disable-line
 	const key = 'item+(rel:item):score';
@@ -255,4 +257,69 @@ test('make queries for secondary items only when need', t => {
 	});
 
 	t.deepEqual(c.query(rKey , [ 1, 5 ]).arr.filter(e => e.rel && e.rel.type === 'loading').length, 1);
+});
+
+
+test.cb.only('new primary item and secondary', t => {
+	const cache = new Cache(); //eslint-disable-line
+	const key = 'item+(rel:item):score';
+	cache.put({
+		knowledge: { [key]: [ [ -Infinity, Infinity ] ] },
+		indexes: { [key]: [
+			{ item: { id: 'item1', type: 'item', score: 1 }, rel: { id: 'me_item1', type: 'rel', role: 1, item: 'item1' } },
+			{ item: { id: 'item2', type: 'item', score: 2 }, rel: { id: 'me_item2', type: 'rel', role: 1, item: 'item2' } },
+		] }
+	});
+
+	cache.put({
+		entities: {
+			item4: { id: 'item4', type: 'item', score: 3 },
+			me_item4: { id: 'me_item4', type: 'rel', role: 1, item: 'item4' }
+		}
+	});
+
+	cache.query(key, [ -Infinity, Infinity ], (err, res) => {
+		console.log(res);
+		t.deepEqual(res.arr, [ { item: { id: 'item1', type: 'item', score: 1 },
+			rel: { id: 'me_item1', type: 'rel', role: 1, item: 'item1' } },
+		  { item: { id: 'item2', type: 'item', score: 2 },
+			rel: { id: 'me_item2', type: 'rel', role: 1, item: 'item2' } },
+		  { item: { id: 'item4', type: 'item', score: 3 },
+			rel: { id: 'me_item4', type: 'rel', role: 1, item: 'item4' } }
+		]);
+		t.end();
+	});
+});
+
+
+
+test.cb.only('new primary item and secondary 2', t => {
+	const cache = new Cache(); //eslint-disable-line
+	const key = 'item+(rel:item):score';
+	cache.put({
+		knowledge: { [key]: [ [ -Infinity, Infinity ] ] },
+		indexes: { [key]: [
+			{ item: { id: 'item1', type: 'item', score: 1 }, rel: { id: 'me_item1', type: 'rel', role: 1, item: 'item1' } },
+			{ item: { id: 'item2', type: 'item', score: 2 }, rel: { id: 'me_item2', type: 'rel', role: 1, item: 'item2' } },
+		] }
+	});
+
+	cache.put({
+		entities: {
+			me_item4: { id: 'me_item4', type: 'rel', role: 1, item: 'item4' },
+			item4: { id: 'item4', type: 'item', score: 3 }
+		}
+	});
+
+	cache.query(key, [ -Infinity, Infinity ], (err, res) => {
+		console.log(res);
+		t.deepEqual(res.arr, [ { item: { id: 'item1', type: 'item', score: 1 },
+			rel: { id: 'me_item1', type: 'rel', role: 1, item: 'item1' } },
+		  { item: { id: 'item2', type: 'item', score: 2 },
+			rel: { id: 'me_item2', type: 'rel', role: 1, item: 'item2' } },
+		  { item: { id: 'item4', type: 'item', score: 3 },
+			rel: { id: 'me_item4', type: 'rel', role: 1, item: 'item4' } }
+		]);
+		t.end();
+	});
 });
