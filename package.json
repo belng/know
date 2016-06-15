@@ -1,6 +1,6 @@
 {
   "name": "know",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "A data structure cache that knows what it doesn’t know.",
   "main": "dist/Cache.js",
   "scripts": {
@@ -11,14 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/scrollback/know.git"
+    "url": "git+https://github.com/belng/know.git"
   },
-  "author": "scrollback",
+  "author": "belong",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/scrollback/know/issues"
+    "url": "https://github.com/belng/know/issues"
   },
-  "homepage": "https://github.com/scrollback/know#readme",
+  "homepage": "https://github.com/belng/know#readme",
   "dependencies": {
     "jsonop": "^3.0.1",
     "juri": "^1.0.2",
