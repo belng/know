@@ -133,7 +133,7 @@ test.serial('push', t => {
 	});
 });
 
-test.serial.cb('watch with partial gap', t => {
+test.skip.serial.cb('watch with partial gap', t => {
 	let flag = false,
 		unwatch = cache.watch(key, [ 6, 9 ], function (res) {
 			if (!flag) {
