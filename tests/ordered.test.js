@@ -143,6 +143,41 @@ test('slice with a 3 range[-Infinity, 0, after]', t => {
 	);
 });
 
+test('order with a string', t => {
+	const orderedArray = new OrderedArray([ 'id' ], [
+		{ id: 'apple' },
+		{ id: 'bravo' },
+		{ id: 'charlie' }
+	]);
+
+	t.deepEqual(
+		orderedArray.slice('az', Infinity),
+		new OrderedArray([ 'id' ], [
+			{ id: 'bravo' },
+			{ id: 'charlie' }
+		])
+	);
+
+	t.deepEqual(
+		orderedArray.slice('bravo', 0, 2),
+		new OrderedArray([ 'id' ], [
+			{ id: 'bravo' },
+			{ id: 'charlie' }
+		])
+	);
+
+	t.deepEqual(
+		orderedArray.slice('brav', 1, 0),
+		new OrderedArray([ 'id' ], [
+			{ id: 'apple' }
+		])
+	);
+
+	t.deepEqual(orderedArray.getRange(), new RangeArray(
+		[[ 'apple', 'charlie' ]]
+	));
+});
+
 test('slice with a 3 range[Infinity, before, 0] inclusive', t => {
 	let orderedArray = new OrderedArray([ 'time' ], [
 		{ id: 'askdjnf', time: 4 },
