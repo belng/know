@@ -66,6 +66,7 @@ test.serial('second put', t => {
 		cc_asdf: { id: 'cc_asdf', type: 'rel', item: 'cc' },
 		cc: { id: 'cc', type: 'thread', createTime: 7 }
 	});
+
 	t.deepEqual(cache.indexes, {
 		[key]: new OrderedArray(
 			[ 'createTime' ],
@@ -260,7 +261,7 @@ test('make queries for secondary items only when need', t => {
 });
 
 
-test.cb.only('new primary item and secondary', t => {
+test.cb('new primary item and secondary', t => {
 	const cache = new Cache(); //eslint-disable-line
 	const key = 'item+(rel:item):score';
 	cache.put({
@@ -273,13 +274,12 @@ test.cb.only('new primary item and secondary', t => {
 
 	cache.put({
 		entities: {
+			me_item4: { id: 'me_item4', type: 'rel', role: 1, item: 'item4' },
 			item4: { id: 'item4', type: 'item', score: 3 },
-			me_item4: { id: 'me_item4', type: 'rel', role: 1, item: 'item4' }
 		}
 	});
 
 	cache.query(key, [ -Infinity, Infinity ], (err, res) => {
-		console.log(res);
 		t.deepEqual(res.arr, [ { item: { id: 'item1', type: 'item', score: 1 },
 			rel: { id: 'me_item1', type: 'rel', role: 1, item: 'item1' } },
 		  { item: { id: 'item2', type: 'item', score: 2 },
@@ -293,7 +293,7 @@ test.cb.only('new primary item and secondary', t => {
 
 
 
-test.cb.only('new primary item and secondary 2', t => {
+test.cb('new primary item and secondary 2', t => {
 	const cache = new Cache(); //eslint-disable-line
 	const key = 'item+(rel:item):score';
 	cache.put({
@@ -312,7 +312,6 @@ test.cb.only('new primary item and secondary 2', t => {
 	});
 
 	cache.query(key, [ -Infinity, Infinity ], (err, res) => {
-		console.log(res);
 		t.deepEqual(res.arr, [ { item: { id: 'item1', type: 'item', score: 1 },
 			rel: { id: 'me_item1', type: 'rel', role: 1, item: 'item1' } },
 		  { item: { id: 'item2', type: 'item', score: 2 },
