@@ -225,3 +225,25 @@ test('difference of full with full', t => {
 		new RangeArray()
 	);
 });
+
+test('difference between 2 range and empty', t => {
+	t.deepEqual(
+		new RangeArray([ [ 5, 10 ] ]).difference(new RangeArray([])),
+		new RangeArray([ [ 5, 10 ] ])
+	);
+});
+
+test('difference between empty range and 2 range', t => {
+	t.deepEqual(
+		new RangeArray([]).difference(new RangeArray([ [ 5, 10 ] ])),
+		new RangeArray([])
+	);
+});
+
+
+test('difference between empty range and 3 range', t => {
+	t.deepEqual(
+		new RangeArray([]).difference(new RangeArray([ [ 5, 1, 0 ] ])),
+		new RangeArray([])
+	);
+});
