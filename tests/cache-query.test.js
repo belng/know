@@ -70,6 +70,9 @@ test.cb('Query when partial results:', t => {
 				t.deepEqual(results.arr, []); t.end();
 			}
 		);
+
+		console.log(cache.queries['thread+(threadrel:item):createTime!(thread:(parents~Sfirst:b762fc59~Fd986~F4d4c~Faaba~F9a1d654f80c7),threadrel:(user:harish))']);
+
 		t.deepEqual(
 			cache.queries['thread+(threadrel:item):createTime!(thread:(parents~Sfirst:b762fc59~Fd986~F4d4c~Faaba~F9a1d654f80c7),threadrel:(user:harish))'],
 			new RangeArray([ [ 1465564462683, 13, 0 ] ])
@@ -79,7 +82,7 @@ test.cb('Query when partial results:', t => {
 	cache.put({
 		knowledge: {
 			'thread+(threadrel:item):createTime!(thread:(parents~Sfirst:b762fc59~Fd986~F4d4c~Faaba~F9a1d654f80c7),threadrel:(user:harish))': new RangeArray([
-				[ 1466165845235, 1, Infinity ]
+				[ 1465564462683, Infinity ]
 			])
 		},
 
