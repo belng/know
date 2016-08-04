@@ -343,3 +343,62 @@ test.cb('should fire watch: on order property change in end of list', t => {
 		});
 	}, 1000);
 });
+
+test('should fire watch listeners on watch and unwatch', t => {
+	const cache = new Cache({});
+
+	let count = 0;
+
+	const removeWatchListener = cache.onWatch(({ slice, range }) => {
+		switch (count) {
+		case 0:
+			t.is(slice.type, 'text');
+			t.is(slice.order, 'createTime');
+			t.deepEqual(range, [ -Infinity, +Infinity ]);
+			break;
+		case 1:
+			t.is(slice.type, 'thread');
+			t.is(slice.order, 'score');
+			t.deepEqual(range, [ -100, +500 ]);
+			break;
+		default:
+			t.fail();
+		}
+	});
+
+	const removeUnWatchListener = cache.onUnWatch(({ slice, range }) => {
+		switch (count) {
+		case 1:
+			t.is(slice.type, 'thread');
+			t.is(slice.order, 'score');
+			t.deepEqual(range, [ -100, +500 ]);
+			break;
+		default:
+			t.fail();
+		}
+	});
+
+	cache.watch({
+		type: 'text',
+		order: 'createTime',
+	}, [ -Infinity, +Infinity ], () => {});
+
+	count++;
+
+	const unWatch = cache.watch({
+		type: 'thread',
+		order: 'score',
+	}, [ -100, +500 ], () => {});
+
+	unWatch();
+
+	removeWatchListener();
+	removeUnWatchListener();
+
+	count++;
+
+	cache.watch({
+		type: 'boo',
+		order: 'ya',
+	}, [ -100, +500 ], () => {});
+});
